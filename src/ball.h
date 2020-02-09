@@ -8,7 +8,7 @@ class Ball
 {
 private:
     float move_x, move_y;
-    int16_t pos_x, pos_y;
+    float pos_x, pos_y;
     int16_t max_x, max_y;
     int16_t speed = 1;
     const int16_t radius=8;

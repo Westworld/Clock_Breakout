@@ -13,12 +13,18 @@ Ball::Ball(Screen * mastertft)
 }
 
 void Ball::draw(void) {
-    tft->fillRect(pos_x, pos_y, radius, color);
+    int16_t x, y;
+    x = (int16_t) pos_x;
+    y = (int16_t) pos_y;    
+    tft->fillRect(x, y, radius, color);
     //tft->fillCircle(pos_x, pos_y, radius, color);
 }
 
 void Ball::undraw(void){
-    tft->fillRect(pos_x, pos_y, radius, ILI9486_BLACK);
+    int16_t x, y;
+    x = (int16_t) pos_x;
+    y = (int16_t) pos_y; 
+    tft->fillRect(x, y, radius, ILI9486_BLACK);
     //tft->fillCircle(pos_x, pos_y, radius, ILI9486_BLACK);
 }
 
