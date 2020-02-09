@@ -14,8 +14,8 @@ public:
     void test(void);
     long getwidth(void);
     long getheight(void);
-    void fillCircle(long x, long y, long radius, long color);
-    void fillRect(long x, long y, long radius, long color);
+    void fillCircle(int16_t x, int16_t y, int16_t radius, uint16_t color);
+    void fillRect(int16_t x, int16_t y, int16_t radius, uint16_t color);
 };
 
 #endif // SCREEN_HPP_

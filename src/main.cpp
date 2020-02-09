@@ -13,6 +13,7 @@ void setup() {
   // put your setup code here, to run once:
    tft = new Screen();
    ball = new Ball(tft);
+   ball->setAngle(20);
    // winkel setzen, nicht 45°
    // nicht komplett löschen und neu zeichnen, nur untere pixel?
 

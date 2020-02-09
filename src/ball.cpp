@@ -22,12 +22,12 @@ void Ball::undraw(void){
     //tft->fillCircle(pos_x, pos_y, radius, ILI9486_BLACK);
 }
 
-void Ball::move(long x, long y) {
+void Ball::move(int16_t x, int16_t y) {
     pos_x = pos_x + x;
     pos_y = pos_y + y;
 }
 
-void Ball::move_draw(long x, long y) {
+void Ball::move_draw(int16_t x, int16_t y) {
     this->undraw();
     pos_x = pos_x + x;
     pos_y = pos_y + y;
@@ -44,19 +44,18 @@ void Ball::move_draw(void) {
 
 }
 
-/*
+
 void Ball::setAngle(float angle)
 {
-    velocity.x = speed * std::cos(angle * M_PI / 180);
-    velocity.y = -speed * std::sin(angle * M_PI / 180);
+    move_x = speed * cos(angle * M_PI / 180);
+    move_y = -speed * sin(angle * M_PI / 180);
 }
 float Ball::getAngle()
 {
     // angle in range [-180; 180]
-    float angle = std::atan2(-velocity.y, velocity.x) * 180 / M_PI;
+    float angle = atan2(-move_y, move_x) * 180 / M_PI;
     // angle in range [0; 360]
     if (angle < 0.f)
         angle += 360.f;
     return angle;
 }
-*/
