@@ -5,7 +5,7 @@ Ball::Ball(Screen * mastertft)
 {
     tft = mastertft;
     pos_x = tft->getwidth() / 2;
-    pos_y = 6;
+    pos_y = 10;
     move_x = 1;
     move_y = 1;
     max_x = tft->getwidth();
@@ -45,9 +45,8 @@ void Ball::move_draw(void) {
     pos_x = pos_x + move_x;
     pos_y = pos_y + move_y;
     if ((pos_x <= 0) || (pos_x >= max_x)) move_x = -move_x;
-    if ((pos_y <= 0) || (pos_y >= max_y)) move_y = -move_y;
+    if ((pos_y <= 4) || (pos_y >= max_y)) move_y = -move_y;
     this->draw();        
-
 }
 
 
@@ -64,4 +63,9 @@ float Ball::getAngle()
     if (angle < 0.f)
         angle += 360.f;
     return angle;
+}
+
+float Ball::getPos()
+{
+    return pos_x;
 }
