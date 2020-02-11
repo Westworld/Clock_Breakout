@@ -5,11 +5,13 @@
 #include "screen.h"
 #include "ball.h"
 #include "paddle.h"
+#include "blocks.h"
 
 Screen * tft;
 
 Ball * ball;
 Paddle * paddle;
+Blocks * blocks;
 
 void setup() {
   // put your setup code here, to run once:
@@ -21,6 +23,10 @@ void setup() {
 
    paddle = new Paddle(tft);
    paddle->draw();
+
+   blocks = new Blocks(tft);
+   blocks->Setup();
+   blocks->draw();
    //tft->test();
 }
 

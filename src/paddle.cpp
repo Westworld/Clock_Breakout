@@ -24,7 +24,6 @@ void Paddle::update(float ballpos)
 {
     int16_t half = paddlewidth / 2;
     int16_t old = (uint16_t) pos_x;
-    int16_t x;
 
     if (ballpos < pos_x) {
         pos_x--;
@@ -50,23 +49,5 @@ void Paddle::update(float ballpos)
             tft->fillRect(pos_x + half, pos_y, 2, paddleheight, color);
         }
     }
-
-/*
-    x = old - (paddlewidth/2);
-    if (x<0)
-        x=0;
-    else if (x+paddlewidth > max_x)
-            x = max_x-paddlewidth;
-
-    tft->fillRect(x, pos_y, paddlewidth, paddleheight-4, ILI9486_BLACK);
-
-    x = pos_x - (paddlewidth/2);
-    if (x<0)
-        x=0;
-    else if (x+paddlewidth > max_x)
-            x = max_x-paddlewidth;
-
-    tft->fillRect(x, pos_y, paddlewidth, paddleheight-4, color);
-  */ 
 
 }

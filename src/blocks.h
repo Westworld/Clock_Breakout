@@ -1,0 +1,30 @@
+#ifndef BLOCKS_HPP_
+#define BLOCKS_HPP_
+
+#include "block.h"
+#include "screen.h"
+
+#define blocksx 14
+#define blocksy 5
+#define screenstartx 2
+#define screenstarty 20
+
+#define numberblocks 60
+
+class Blocks
+{
+private:
+    Block* allblocks[numberblocks];
+    Screen * tft;
+
+
+
+
+public:
+    Blocks(Screen * mastertft);
+    void Setup(void);
+    //void update(float ballpos);
+    void draw(void);
+};
+
+#endif // BLOCKS_HPP_
