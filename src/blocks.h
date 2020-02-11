@@ -5,11 +5,11 @@
 #include "screen.h"
 
 #define blocksx 14
-#define blocksy 5
+#define blocksy 6
 #define screenstartx 2
 #define screenstarty 20
 
-#define numberblocks 60
+#define numberblocks 70
 
 class Blocks
 {

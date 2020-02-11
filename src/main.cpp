@@ -7,6 +7,11 @@
 #include "paddle.h"
 #include "blocks.h"
 
+#include <Console.h>
+
+
+// don't forget to set in Console.h debug = none
+
 Screen * tft;
 
 Ball * ball;
@@ -14,10 +19,12 @@ Paddle * paddle;
 Blocks * blocks;
 
 void setup() {
+   Console::begin();
+  Console::line();
   // put your setup code here, to run once:
    tft = new Screen();
    ball = new Ball(tft);
-   ball->setAngle(20);
+   ball->setAngle(40);
    // winkel setzen, nicht 45°
    // nicht komplett löschen und neu zeichnen, nur untere pixel?
 

@@ -1,5 +1,7 @@
 #include "Blocks.h"
 
+#include <Console.h>
+
 
 Blocks::Blocks(Screen * mastertft)
 {
@@ -15,11 +17,14 @@ void Blocks::Setup(void)
    int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
    int16_t curelement;
 
+   //Console::info("Blocks setup");
+
    for (int16_t i=0;i<blocksx;i++) {
         for (int16_t j=0; j<blocksy; j++) {
-            curelement = (i*blocksx)+(j*blocksy);
+            curelement = (i*blocksy)+(j);
+            //Console::info("element [%d]: ", curelement);
             if (curelement < maxelements)
-                allblocks[curelement]->activate(i*(blockwidth+5), j*(blockheight+5));
+                allblocks[curelement]->activate(i*(blockwidth+10), 300- (j*(blockheight+10)));
         }
     }
 }
@@ -31,10 +36,11 @@ int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
 
    for (int16_t i=0;i<blocksx;i++) {
         for (int16_t j=0; j<blocksy; j++) {
-            curelement = (i*blocksx)+(j*blocksy);
-            if (curelement < maxelements)
+            curelement = (i*blocksy)+(j);
+            if (curelement < maxelements) {
                 allblocks[curelement]->draw(tft);
-        }
+                }
+            }
     }
   
 }

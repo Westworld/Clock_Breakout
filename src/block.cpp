@@ -1,6 +1,6 @@
 #include "Block.h"
 
-
+#include <Console.h>
 
 
 Block::Block(void)
@@ -16,9 +16,13 @@ void Block::activate(int16_t posx, int16_t posy)
 
     pos_x = posx;
     pos_y = posy;
+
+    //Console::info("Block pos [%d] [%d]: ", pos_x, pos_y);
 }
 
 void Block::draw(Screen * tft)
 {
-     tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
+    if (used) {
+        tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
+    } 
 }
