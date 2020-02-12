@@ -2,7 +2,7 @@
 #define BALL_HPP_
 
 #include "screen.h"
-
+#include "Blocks.h"
 
 class Ball
 {
@@ -24,6 +24,7 @@ public:
     void move(int16_t x, int16_t y);
     void move_draw(int16_t x, int16_t y);
     void move_draw(void);
+    void move_draw(Blocks * blocks);
     void setAngle(float angle);
     float getAngle();
     float getPos();

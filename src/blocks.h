@@ -25,6 +25,7 @@ public:
     void Setup(void);
     //void update(float ballpos);
     void draw(void);
+    bool check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y);
 };
 
 #endif // BLOCKS_HPP_

@@ -39,7 +39,7 @@ void setup() {
 
 
 void loop() {
-  ball->move_draw();
+  ball->move_draw(blocks);
   paddle->update(ball->getPos());
   delay(2);
 }

@@ -1,5 +1,6 @@
 #include "Block.h"
 
+
 #include <Console.h>
 
 
@@ -25,4 +26,11 @@ void Block::draw(Screen * tft)
     if (used) {
         tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
     } 
+}
+
+bool Block::check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y)
+{
+    bool result;
+
+    return result;
 }
