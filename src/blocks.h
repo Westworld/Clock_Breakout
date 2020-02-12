@@ -4,6 +4,7 @@
 #include "block.h"
 #include "screen.h"
 
+
 #define blocksx 14
 #define blocksy 6
 #define screenstartx 2
@@ -25,7 +26,7 @@ public:
     void Setup(void);
     //void update(float ballpos);
     void draw(void);
-    int16_t check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y);
+    void checkBall(Ball * ball);
 };
 
 #endif // BLOCKS_HPP_

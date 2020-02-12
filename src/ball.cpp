@@ -12,6 +12,33 @@ Ball::Ball(Screen * mastertft)
     max_y = tft->getheight();
 }
 
+int16_t Ball::GetX(void) {
+    return pos_x;
+}
+
+Ballsize Ball::GetSize(void) {
+    Ballsize thesize;
+
+    if (move_x > 0) 
+        { thesize.x = pos_x; thesize.x2 = pos_x+radius; }
+    else 
+        { thesize.x2 = pos_x; thesize.x = pos_x-radius; }
+
+    if (move_y > 0) 
+        { thesize.y = pos_y; thesize.y2 = pos_y+radius; }
+    else 
+        { thesize.y2 = pos_y; thesize.y = pos_y-radius; }
+
+    thesize.movex = move_x;
+    thesize.movey = move_y;
+
+    return thesize;
+}
+
+void Ball::SetBlock(int16_t index) {
+    blockid = index;
+}
+
 void Ball::draw(void) {
     int16_t x, y;
     x = (int16_t) pos_x;
@@ -25,7 +52,6 @@ void Ball::undraw(void){
     x = (int16_t) pos_x;
     y = (int16_t) pos_y; 
     tft->fillRect(x, y, radius, ILI9486_BLACK);
-    //tft->fillCircle(pos_x, pos_y, radius, ILI9486_BLACK);
 }
 
 void Ball::move(int16_t x, int16_t y) {
@@ -43,7 +69,7 @@ void Ball::move_draw(int16_t x, int16_t y) {
 
 
 
-
+/*
 void Ball::move_draw(Blocks * blocks) {
     this->undraw();
     pos_x = pos_x + move_x;
@@ -69,6 +95,7 @@ void Ball::move_draw(Blocks * blocks) {
 
     this->draw();        
 }
+*/
 
 void Ball::move_draw(void) {
     this->undraw();
@@ -92,9 +119,4 @@ float Ball::getAngle()
     if (angle < 0.f)
         angle += 360.f;
     return angle;
-}
-
-float Ball::getPos()
-{
-    return pos_x;
 }
