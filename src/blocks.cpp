@@ -50,7 +50,7 @@ bool Blocks::check(int16_t pos_x, int16_t pos_y, int16_t move_x, int16_t move_y)
      bool result=false;
      for (int16_t i=0; i<numberblocks; i++) {
                 if (allblocks[i]->active) {
-                    result = allblocks[i]->check(pos_x, pos_y, move_x, move_y);
+                    result = allblocks[i]->check(pos_x, pos_y, move_x, move_y, tft);
                     if (result)
                          break;
                     }

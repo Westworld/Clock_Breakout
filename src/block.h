@@ -22,7 +22,7 @@ public:
     void activate(int16_t posx, int16_t posy) ;
     //void update(float ballpos);;
     void draw(Screen * mastertft);
-    bool check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y);
+    bool check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y, Screen * mastertft);
 };
 
 #endif // BLOCK_HPP_

@@ -24,18 +24,27 @@ void Block::activate(int16_t posx, int16_t posy)
 void Block::draw(Screen * tft)
 {
     if (used) {
-        tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
+        if (active)
+            tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
+        else
+        {
+            tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_BLACK);
+        }
+            
     } 
 }
 
-bool Block::check(int16_t posx, int16_t posy, int16_t movex, int16_t movey)
+bool Block::check(int16_t posx, int16_t posy, int16_t movex, int16_t movey, Screen * tft)
 {
     bool result=false;
 
     if (used && active) {
-            if (((posx <= (pos_x+blockwidth)) && (posx >= pos_x)) 
-                && ((posy <= (pos_y+blockheight)) && (posy >= pos_y) )
-                ;
+            if ( (posx <= (pos_x+blockwidth)) && (posx >= pos_x) 
+                && (posy <= (pos_y+blockheight)) && (posy >= pos_y) )
+                {
+                    active=false;
+                    draw(tft);
+                }
   
         
     }
