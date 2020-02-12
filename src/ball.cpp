@@ -53,8 +53,19 @@ void Ball::move_draw(Blocks * blocks) {
     else
         if ((pos_y <= 4) || (pos_y >= max_y)) 
             move_y = -move_y; 
-        else
-            blocks->check(pos_x, pos_y, move_x, move_y);
+        else 
+        {
+            int16_t result = blocks->check(pos_x, pos_y, move_x, move_y);
+            switch (result) {
+                case 0: break; //nothing
+                case 1: move_x = -move_x; break;
+                case 2: move_x = -move_x; break;
+                case 3: move_y = -move_y; break;
+                case 4: move_y = -move_y; break;
+                default: break; //nothing
+            }
+
+        }    
 
     this->draw();        
 }
