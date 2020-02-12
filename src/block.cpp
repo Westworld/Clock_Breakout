@@ -28,9 +28,17 @@ void Block::draw(Screen * tft)
     } 
 }
 
-bool Block::check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y)
+bool Block::check(int16_t posx, int16_t posy, int16_t movex, int16_t movey)
 {
-    bool result;
+    bool result=false;
+
+    if (used && active) {
+            if (((posx <= (pos_x+blockwidth)) && (posx >= pos_x)) 
+                && ((posy <= (pos_y+blockheight)) && (posy >= pos_y) )
+                ;
+  
+        
+    }
 
     return result;
 }
