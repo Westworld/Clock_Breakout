@@ -45,17 +45,27 @@ int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
   
 }
 
+void Blocks::drawBlock(int16_t curBlock)
+{
+    int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
+
+    if ((curBlock >=0) && (curBlock < maxelements))
+        allblocks[curBlock]->draw(tft);
+}
 
 void Blocks::checkBall(Ball * ball)
 {
     Ballsize thesize = ball->GetSize();
     int16_t result;
 
+    ball->SetBlock(-1);
     for (int16_t i=0; i<numberblocks; i++) {
         if (allblocks[i]->active) {
             result = allblocks[i]->check(thesize, ball, tft);
-            if (result == -1)
-                ball->SetBlock(i);
+            if (result)
+            {   ball->SetBlock(i);
+                return; 
+            }            
         }
     }    
 }

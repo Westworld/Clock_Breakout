@@ -13,13 +13,12 @@
 // don't forget to set in Console.h debug = none
 
 Screen * tft;
-
 Ball * ball;
 Paddle * paddle;
 Blocks * blocks;
 
 void setup() {
-   Console::begin();
+  Console::begin();
   Console::line();
   // put your setup code here, to run once:
    tft = new Screen();
@@ -39,8 +38,12 @@ void setup() {
 
 
 void loop() {
+  int16_t curBlock;
+
   blocks->checkBall(ball);
-  ball->move_draw();  // blocks
+  curBlock = ball->move_draw();  
+  if (curBlock>=0)
+    blocks->drawBlock(curBlock);  // redraw empty block below moving ball 
   paddle->update(ball->GetX());
   delay(2);
 }

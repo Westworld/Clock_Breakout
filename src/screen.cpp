@@ -29,8 +29,12 @@ void Screen::fillCircle(int16_t x, int16_t y, int16_t radius, uint16_t color) {
 }
 void Screen::fillRect(int16_t x, int16_t y, int16_t radius, uint16_t color) {
     tft.fillRect(x, y, radius, radius, color);
-}
+}    
 
 void Screen::fillRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color) {
     tft.fillRect(x, y, width, height, color);
+}
+
+void Screen::drawRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color) {
+    tft.drawRect(x, y, width, height, color);
 }

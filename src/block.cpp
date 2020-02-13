@@ -28,14 +28,14 @@ void Block::draw(Screen * tft)
             tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
         else
         {
-            tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_BLACK);
+            tft->drawRect(pos_x, pos_y, blockwidth, blockheight, color);
         }
             
     } 
 }
 
-int16_t Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
-   int16_t result=0;
+bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
+   bool result=false;
 
     if (used) {
         if ( (ballsize.x <= (pos_x+blockwidth)) && (ballsize.x2 >= pos_x) 
@@ -43,33 +43,48 @@ int16_t Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
             {
                 if (!active) 
                 {
-                    return -1;
+                    return true;
                 }
                 else
                 {
                     active=false;
                     draw(tft);
-                /*
-                // calculate new reflection angle
-                if (movex<0)  // moving left
-                {    if (posx <= (pos_x+blockwidth))
-                    { result = 1; return result;  }
-                }
-                else
-                {    if (posx >= pos_x)
-                    { result = 2; return result;  }
-                }
 
-                if (movey<0)  // moving down
-                {    if (posy <= (pos_y+blockheight))
-                    { result = 3; return result;  }
-                }
-                else
-                {    if (posy >= pos_y)
-                    { result = 4; return result;  }
-                }   
-                return 0;  // should never happen! pass thru...
-                */  
+                    // calculate new reflection angle
+                    if (ballsize.movex < 0) // moving left
+                    {
+                        if (ballsize.x <= (pos_x + blockwidth))
+                        {
+                            ball->SetMove(-ballsize.movex, ballsize.movey);
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (ballsize.x >= pos_x)
+                        {
+                            ball->SetMove(-ballsize.movex, ballsize.movey);
+                            return true;
+                        }
+                    }
+
+                    if (ballsize.movey < 0) // moving down
+                    {
+                        if (ballsize.y <= (pos_y + blockheight))
+                        {
+                            ball->SetMove(ballsize.movex, -ballsize.movey);
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (ballsize.y >= pos_y)
+                        {
+                            ball->SetMove(ballsize.movex, -ballsize.movey);
+                            return true;
+                        }
+                    }
+                    return 0; // should never happen! pass thru...
                 }         
             }       
     }
@@ -80,7 +95,7 @@ int16_t Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
 
 int16_t Block::check(int16_t posx, int16_t posy, int16_t movex, int16_t movey, Screen * tft)
 {
-    int16_t result=0;
+    int16_t result=false;
 
     if (used && active) {
         if ( (posx <= (pos_x+blockwidth)) && (posx >= pos_x) 
@@ -106,10 +121,10 @@ int16_t Block::check(int16_t posx, int16_t posy, int16_t movex, int16_t movey, S
                 {    if (posy >= pos_y)
                     { result = 4; return result;  }
                 }   
-                return 0;  // should never happen! pass thru...             
+                return false;  // should never happen! pass thru...             
             }       
     }
 
-    return result;
+    return false;
 }
 

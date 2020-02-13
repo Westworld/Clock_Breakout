@@ -22,7 +22,7 @@ public:
     //void update(float ballpos);;
     void draw(Screen * mastertft);
     int16_t check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y, Screen * mastertft);
-    int16_t check(Ballsize ballsize, Ball * ball, Screen * tft);
+    bool check(Ballsize ballsize, Ball * ball, Screen * tft);
 };
 
 #endif // BLOCK_HPP_

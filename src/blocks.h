@@ -27,6 +27,7 @@ public:
     //void update(float ballpos);
     void draw(void);
     void checkBall(Ball * ball);
+    void drawBlock(int16_t curBlock);
 };
 
 #endif // BLOCKS_HPP_
