@@ -1,7 +1,7 @@
 #include "Blocks.h"
 
 #include <Console.h>
-
+#include <digits.h>
 
 Blocks::Blocks(Screen * mastertft)
 {
@@ -26,6 +26,44 @@ void Blocks::Setup(void)
             if (curelement < maxelements)
                 allblocks[curelement]->activate(i*(blockwidth+10), 300- (j*(blockheight+10)));
         }
+    }
+}
+
+void Blocks::Setup(int16_t position, int16_t digit)
+{
+    // start für position 1 und digit 1
+   int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
+   int16_t curelement=0;
+   int16_t x, y;
+
+    for (uint16_t i=0; i<sizeof(value1); i+=2) {
+            x = (value1[i]*blockwidth) + screenstartx;
+            y = screenstarty - (value1[i+1]*blockheight);
+            if (curelement < maxelements)
+                allblocks[curelement++]->activate(x, y);
+    }
+}
+
+
+void Blocks::Setup(byte digit[4])
+{
+    // start für position 1 und digit 1
+   int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
+   int16_t curelement=0;
+   int16_t x, y, startx=screenstartx;
+
+
+    for (int16_t digitcounter=0; digitcounter<4; digitcounter++) {
+        int16_t value = digit[digitcounter];
+        if ((value < 0) || (value>9)) return;
+
+        for (uint16_t i=0; i<sizeof(ziffern[value]); i+=2) {
+            x = (ziffern[value][i]*(blockwidth+10)) + startx;
+            y = screenstarty - (ziffern[value][i+1]*(blockheight+10));
+            if (curelement < maxelements)
+                allblocks[curelement++]->activate(x, y);
+        }
+        startx += (3*(blockwidth+10));
     }
 }
 

@@ -8,7 +8,7 @@
 #define blocksx 14
 #define blocksy 6
 #define screenstartx 2
-#define screenstarty 20
+#define screenstarty 300
 
 #define numberblocks 70
 
@@ -24,10 +24,13 @@ private:
 public:
     Blocks(Screen * mastertft);
     void Setup(void);
+    void Setup(int16_t position, int16_t digit);
+    void Setup(byte digit[4]);
     //void update(float ballpos);
     void draw(void);
     void checkBall(Ball * ball);
     void drawBlock(int16_t curBlock);
+
 };
 
 #endif // BLOCKS_HPP_
