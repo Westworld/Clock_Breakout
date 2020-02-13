@@ -42,8 +42,13 @@ void loop() {
 
   blocks->checkBall(ball);
   curBlock = ball->move_draw();  
-  if (curBlock>=0)
-    blocks->drawBlock(curBlock);  // redraw empty block below moving ball 
+ 
   paddle->update(ball->GetX());
-  delay(2);
+
+    if (curBlock>=0)
+  {
+    blocks->drawBlock(curBlock);  // redraw empty block below moving ball 
+  } 
+  else
+    delay(10);
 }

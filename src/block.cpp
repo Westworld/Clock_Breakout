@@ -28,9 +28,17 @@ void Block::draw(Screen * tft)
             tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
         else
         {
+            //tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_BLACK);
             tft->drawRect(pos_x, pos_y, blockwidth, blockheight, color);
         }
             
+    } 
+}
+
+void Block::undraw(Screen * tft)
+{
+    if (used) {
+        tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_BLACK);  
     } 
 }
 
@@ -47,23 +55,26 @@ bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
                 }
                 else
                 {
+                    //Console::info("block x [%d]: y [%d] ", ballsize.movex, ballsize.movey);
+
                     active=false;
-                    draw(tft);
+                    undraw(tft);
+                    //draw(tft);
 
                     // calculate new reflection angle
                     if (ballsize.movex < 0) // moving left
                     {
-                        if (ballsize.x <= (pos_x + blockwidth))
+                        if ((ballsize.x <= (pos_x + blockwidth)) && (ballsize.y <= (pos_y+blockheight)) && (ballsize.y2 >= pos_y))
                         {
-                            ball->SetMove(-ballsize.movex, ballsize.movey);
+                            ball->InvertMove(true,false);
                             return true;
                         }
                     }
                     else
                     {
-                        if (ballsize.x >= pos_x)
+                        if ((ballsize.x >= pos_x) && (ballsize.y <= (pos_y+blockheight)) && (ballsize.y2 >= pos_y) )
                         {
-                            ball->SetMove(-ballsize.movex, ballsize.movey);
+                            ball->InvertMove(true,false);
                             return true;
                         }
                     }
@@ -72,7 +83,7 @@ bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
                     {
                         if (ballsize.y <= (pos_y + blockheight))
                         {
-                            ball->SetMove(ballsize.movex, -ballsize.movey);
+                            ball->InvertMove(false,true);
                             return true;
                         }
                     }
@@ -80,7 +91,7 @@ bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
                     {
                         if (ballsize.y >= pos_y)
                         {
-                            ball->SetMove(ballsize.movex, -ballsize.movey);
+                            ball->InvertMove(false,true);
                             return true;
                         }
                     }

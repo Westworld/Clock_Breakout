@@ -1,5 +1,5 @@
 #include "Ball.h"
-
+#include "Console.h"
 
 Ball::Ball(Screen * mastertft)
 {
@@ -18,7 +18,7 @@ int16_t Ball::GetX(void) {
 
 Ballsize Ball::GetSize(void) {
     Ballsize thesize;
-
+/*
     if (move_x > 0) 
         { thesize.x = pos_x; thesize.x2 = pos_x+radius; }
     else 
@@ -28,16 +28,28 @@ Ballsize Ball::GetSize(void) {
         { thesize.y = pos_y; thesize.y2 = pos_y+radius; }
     else 
         { thesize.y2 = pos_y; thesize.y = pos_y-radius; }
+*/
 
+    thesize.x = pos_x; thesize.x2 = pos_x+radius;
+    thesize.y = pos_y; thesize.y2 = pos_y+radius;
+    
     thesize.movex = move_x;
     thesize.movey = move_y;
 
     return thesize;
 }
 
-void Ball::SetMove(int16_t x, int16_t y) {
+void Ball::SetMove(float x, float y) {
+
+//Console::info("set move x [%d] y [%F] ", x, y);
+
     move_x = x;
     move_y = y;
+}
+
+void Ball::InvertMove(bool x, bool y) {
+ if (x) move_x = -move_x;
+ if (y) move_y = -move_y;
 }
 
 void Ball::SetBlock(int16_t index) {

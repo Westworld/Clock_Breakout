@@ -5,7 +5,8 @@
 
 struct Ballsize
 {
-    int16_t x, y, x2, y2, movex, movey;
+    float x, y, x2, y2;
+    float movex, movey;
 };
 
 class Ball
@@ -36,8 +37,8 @@ public:
     int16_t GetX(void);
     Ballsize GetSize(void);
     void SetBlock(int16_t index);
-    void SetMove(int16_t x, int16_t y);
-
+    void SetMove(float x, float y);
+    void InvertMove(bool x, bool y);
 };
 
 #endif // BALL_HPP_

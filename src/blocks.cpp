@@ -98,7 +98,7 @@ void Blocks::checkBall(Ball * ball)
 
     ball->SetBlock(-1);
     for (int16_t i=0; i<numberblocks; i++) {
-        if (allblocks[i]->active) {
+        if (allblocks[i]->used) {
             result = allblocks[i]->check(thesize, ball, tft);
             if (result)
             {   ball->SetBlock(i);
