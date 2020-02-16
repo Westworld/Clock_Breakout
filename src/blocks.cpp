@@ -58,12 +58,32 @@ void Blocks::Setup(byte digit[4])
         if ((value < 0) || (value>9)) return;
 
         for (uint16_t i=0; i<sizeof(ziffern[value]); i+=2) {
-            x = (ziffern[value][i]*(blockwidth+10)) + startx;
-            y = screenstarty - (ziffern[value][i+1]*(blockheight+10));
-            if (curelement < maxelements)
-                allblocks[curelement++]->activate(x, y);
+            if (ziffern[value][i] != 10)
+            {
+                x = (ziffern[value][i]*((blockwidth/2)+2)) + startx;
+                y = screenstarty - (ziffern[value][i+1]*((blockheight/2)+2));
+                x = 430-x;
+                y = 420-y;
+                if (curelement < maxelements)
+                    allblocks[curelement++]->activate(x, y);
+            }
         }
         startx += (3*(blockwidth+10));
+        if (digitcounter == 1) {
+            //startx -= (blockwidth+10);
+            x = ((blockwidth/2)+2) + startx;
+            y = screenstarty - (2*((blockheight/2)+2));
+            x = 430-x;
+            y = 420-y;
+            allblocks[curelement++]->activate(x, y);
+
+            x = ((blockwidth/2)+2) + startx;
+            y = screenstarty - (6*((blockheight/2)+2));
+            x = 430-x;
+            y = 420-y;
+            allblocks[curelement++]->activate(x, y);
+            startx += (2*(blockwidth+10));
+        }
     }
 }
 

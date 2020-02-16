@@ -31,7 +31,11 @@ void setup() {
    paddle->draw();
 
    blocks = new Blocks(tft);
-   blocks->Setup();
+   //blocks->Setup();
+
+  byte uhrzeit[4] = {1, 2, 3, 0};
+  blocks->Setup(uhrzeit);
+
    blocks->draw();
    //tft->test();
 }

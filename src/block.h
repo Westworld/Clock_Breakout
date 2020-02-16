@@ -4,8 +4,8 @@
 #include "screen.h"
 #include "ball.h"
 
-#define blockwidth 28
-#define blockheight 22
+#define blockwidth 23
+#define blockheight 20
 
 class Block
 {
