@@ -24,7 +24,7 @@ void Blocks::Setup(void)
             curelement = (i*blocksy)+(j);
             //Console::info("element [%d]: ", curelement);
             if (curelement < maxelements)
-                allblocks[curelement]->activate(i*(blockwidth+10), 300- (j*(blockheight+10)));
+                allblocks[curelement]->activate(i*(blockwidth+10), screenstarty- (j*(blockheight+10)));
         }
     }
 }

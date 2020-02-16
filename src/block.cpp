@@ -44,10 +44,14 @@ void Block::undraw(Screen * tft)
 
 bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
    bool result=false;
-
+// 0/0 is right bottom
     if (used) {
-        if ( (ballsize.x <= (pos_x+blockwidth)) && (ballsize.x2 >= pos_x) 
+        /*
+                if ( (ballsize.x <= (pos_x+blockwidth)) && (ballsize.x2 >= pos_x) 
             && (ballsize.y <= (pos_y+blockheight)) && (ballsize.y2 >= pos_y) )
+            */
+        if ( (ballsize.x2 >= (pos_x)) && (ballsize.x <= (pos_x+blockwidth)) 
+            && (ballsize.y2 >= (pos_y)) && (ballsize.y <= (pos_y+blockheight)) )
             {
                 if (!active) 
                 {
@@ -61,42 +65,15 @@ bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
                     undraw(tft);
                     //draw(tft);
 
-                    // calculate new reflection angle
-                    if (ballsize.movex < 0) // moving left
-                    {
-                        if ((ballsize.x <= (pos_x + blockwidth)) && (ballsize.y <= (pos_y+blockheight)) && (ballsize.y2 >= pos_y))
-                        {
-                            ball->InvertMove(true,false);
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        if ((ballsize.x >= pos_x) && (ballsize.y <= (pos_y+blockheight)) && (ballsize.y2 >= pos_y) )
-                        {
-                            ball->InvertMove(true,false);
-                            return true;
-                        }
-                    }
+                    // wenn er runtergeht und x und x2 außerhalb, dann noch entweder links oder rechts
 
-                    if (ballsize.movey < 0) // moving down
-                    {
-                        if (ballsize.y <= (pos_y + blockheight))
-                        {
-                            ball->InvertMove(false,true);
-                            return true;
-                        }
-                    }
+                    if ((ballsize.y2 > (pos_y+1)) && (ballsize.y < (pos_y+blockheight+1)))
+                        ball->InvertMove(true,false);
                     else
-                    {
-                        if (ballsize.y >= pos_y)
-                        {
-                            ball->InvertMove(false,true);
-                            return true;
-                        }
-                    }
-                    return 0; // should never happen! pass thru...
-                }         
+                        ball->InvertMove(false,true);
+                    
+                    return true;
+                }    
             }       
     }
 

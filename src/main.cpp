@@ -23,7 +23,7 @@ void setup() {
   // put your setup code here, to run once:
    tft = new Screen();
    ball = new Ball(tft);
-   ball->setAngle(40);
+   ball->setAngle(37);
    // winkel setzen, nicht 45°
    // nicht komplett löschen und neu zeichnen, nur untere pixel?
 
@@ -40,9 +40,10 @@ void setup() {
 void loop() {
   int16_t curBlock;
 
-  blocks->checkBall(ball);
+
   curBlock = ball->move_draw();  
- 
+  blocks->checkBall(ball);
+   
   paddle->update(ball->GetX());
 
     if (curBlock>=0)

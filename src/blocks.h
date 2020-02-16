@@ -5,12 +5,12 @@
 #include "screen.h"
 
 
-#define blocksx 14
-#define blocksy 6
+#define blocksx 12
+#define blocksy 5
 #define screenstartx 2
-#define screenstarty 300
+#define screenstarty 280
 
-#define numberblocks 70
+#define numberblocks 75
 
 class Blocks
 {
@@ -29,6 +29,7 @@ public:
     //void update(float ballpos);
     void draw(void);
     void checkBall(Ball * ball);
+    //void checkBall(Ball * ball);  ballsize
     void drawBlock(int16_t curBlock);
 
 };
