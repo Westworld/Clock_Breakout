@@ -4,8 +4,19 @@
 #include "screen.h"
 #include "ball.h"
 
-#define blockwidth 23
-#define blockheight 20
+//#define blockwidth 23
+//#define blockheight 20
+// #define blockstartx 430
+// #define blockstarty 420
+// #define blockoffset 10
+
+// for 320x240
+#define blockwidth 12
+#define blockheight 14
+#define blockstartx 295
+#define blockstarty 400
+#define blockoffset 10
+
 
 class Block
 {

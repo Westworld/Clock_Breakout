@@ -62,8 +62,8 @@ void Blocks::Setup(byte digit[4])
             {
                 x = (ziffern[value][i]*((blockwidth/2)+2)) + startx;
                 y = screenstarty - (ziffern[value][i+1]*((blockheight/2)+2));
-                x = 430-x;
-                y = 420-y;
+                x = blockstartx-x;
+                y = blockstarty-y;
                 if (curelement < maxelements)
                     allblocks[curelement++]->activate(x, y);
             }
@@ -73,16 +73,16 @@ void Blocks::Setup(byte digit[4])
             //startx -= (blockwidth+10);
             x = ((blockwidth/2)+2) + startx;
             y = screenstarty - (2*((blockheight/2)+2));
-            x = 430-x;
-            y = 420-y;
+            x = blockstartx-x;
+            y = blockstarty-y;
             allblocks[curelement++]->activate(x, y);
 
             x = ((blockwidth/2)+2) + startx;
             y = screenstarty - (6*((blockheight/2)+2));
-            x = 430-x;
-            y = 420-y;
+            x = blockstartx-x;
+            y = blockstarty-y;
             allblocks[curelement++]->activate(x, y);
-            startx += (2*(blockwidth+10));
+            startx += (2*(blockwidth+blockoffset));
         }
     }
 }
