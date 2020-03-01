@@ -16,6 +16,10 @@ Screen::Screen() {
     tft.fillScreen(ILI9486_BLACK);
 }
 
+void Screen::setRotation(int16_t rot) {
+    tft.setRotation(rot);
+}
+
 void Screen::test(void) {
     int 
     cx = tft.width(),
@@ -43,4 +47,15 @@ void Screen::fillRect(int16_t x, int16_t y, int16_t width, int16_t height, uint1
 
 void Screen::drawRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color) {
     tft.drawRect(x, y, width, height, color);
+}
+
+void Screen::drawText(String text, int16_t x, int16_t y) {
+        tft.setTextColor(ILI9486_YELLOW, ILI9486_BLACK);
+        tft.setCursor(x, y);
+        tft.println(text);
+        
+}
+
+void Screen::fillScreen(uint16_t color) {
+    tft.fillScreen(color);
 }

@@ -24,7 +24,8 @@
 #define LCD_D6 27
 #define LCD_D7 14
 
-#define ILI9486_YELLOW      0xFFE0 
+#define ILI9486_YELLOW      0xFE00 // FFE0
+#define ILI9486_YELLOW2     0xFF78 
 #define ILI9486_BLACK       0x0000 
 #define ILI9486_CYAN        0x07FF 
 
@@ -43,6 +44,9 @@ public:
     void fillRect(int16_t x, int16_t y, int16_t radius, uint16_t color);
     void fillRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color);
     void drawRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color);
+    void drawText(String text, int16_t x, int16_t y);
+    void setRotation(int16_t rot);
+    void fillScreen(uint16_t color);
 };
 
 #endif // SCREEN_HPP_

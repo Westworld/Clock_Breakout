@@ -28,8 +28,8 @@ void Block::draw(Screen * tft)
             tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
         else
         {
-            //tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_BLACK);
-            tft->drawRect(pos_x, pos_y, blockwidth, blockheight, color);
+            tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_YELLOW2);
+            //tft->drawRect(pos_x, pos_y, blockwidth, blockheight, color);
         }
             
     } 
