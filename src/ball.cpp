@@ -16,6 +16,10 @@ int16_t Ball::GetX(void) {
     return pos_x;
 }
 
+void Ball::SetY(int16_t y) {
+    pos_y = y;
+}
+
 Ballsize Ball::GetSize(void) {
     Ballsize thesize;
 /*

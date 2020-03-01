@@ -13,7 +13,7 @@
 // for 320x240
 #define blockwidth 12
 #define blockheight 14
-#define blockstartx 295
+#define blockstartx 280
 #define blockstarty 400
 #define blockoffset 10
 

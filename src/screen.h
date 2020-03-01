@@ -25,7 +25,7 @@
 #define LCD_D7 14
 
 #define ILI9486_YELLOW      0xFE00 // FFE0
-#define ILI9486_YELLOW2     0xFF78 
+#define ILI9486_YELLOW2     0xFF34
 #define ILI9486_BLACK       0x0000 
 #define ILI9486_CYAN        0x07FF 
 

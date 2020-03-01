@@ -91,6 +91,7 @@ void CheckTime() {
     uhrzeit[2] = cur_min / 10;
     uhrzeit[3] = cur_min % 10;
     tft->fillScreen(ILI9486_BLACK);
+    ball->SetY(10);
     blocks->Setup(uhrzeit);
     blocks->draw();
   }
@@ -112,7 +113,7 @@ void loop() {
    
   paddle->update(ball->GetX());
 
-    if (curBlock>=0)
+  if (curBlock>=0)
   {
     blocks->drawBlock(curBlock);  // redraw empty block below moving ball 
     delay(5);

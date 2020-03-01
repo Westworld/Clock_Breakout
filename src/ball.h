@@ -35,6 +35,7 @@ public:
     void setAngle(float angle);
     float getAngle();
     int16_t GetX(void);
+    void SetY(int16_t y);
     Ballsize GetSize(void);
     void SetBlock(int16_t index);
     void SetMove(float x, float y);
