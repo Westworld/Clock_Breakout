@@ -113,6 +113,8 @@ void loop() {
    
   paddle->update(ball->GetX());
 
+  blocks->draw();
+/*
   if (curBlock>=0)
   {
     blocks->drawBlock(curBlock);  // redraw empty block below moving ball 
@@ -120,7 +122,7 @@ void loop() {
   } 
   else
     delay(5);
-
+*/
     
 
 }
