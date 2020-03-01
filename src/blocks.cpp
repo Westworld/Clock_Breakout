@@ -53,6 +53,10 @@ void Blocks::Setup(byte digit[4])
    int16_t x, y, startx=screenstartx;
 
 
+    for (int16_t digitcounter=0; digitcounter<maxelements; digitcounter++) {
+        allblocks[digitcounter]->setUnused();
+    }
+
     for (int16_t digitcounter=0; digitcounter<4; digitcounter++) {
         int16_t value = digit[digitcounter];
         if ((value < 0) || (value>9)) return;

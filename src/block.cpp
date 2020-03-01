@@ -21,6 +21,12 @@ void Block::activate(int16_t posx, int16_t posy)
     //Console::info("Block pos [%d] [%d]: ", pos_x, pos_y);
 }
 
+void Block::setUnused(void) 
+{
+    used = false;
+    active = false;
+}
+
 void Block::draw(Screen * tft)
 {
     if (used) {

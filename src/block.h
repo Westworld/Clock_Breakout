@@ -25,11 +25,12 @@ private:
     uint16_t color = ILI9486_YELLOW;
 
 public:
-   bool active=false;
+    bool active=false;
     bool used=false;
 
     Block(void);
     void activate(int16_t posx, int16_t posy) ;
+    void setUnused(void);
     //void update(float ballpos);;
     void draw(Screen * mastertft);
     void undraw(Screen * mastertft);
