@@ -62,14 +62,8 @@ void setup() {
    paddle->draw();
 
    blocks = new Blocks(tft);
-   //blocks->Setup();
-
-  //uhrzeit[4] = {1, 2, 3, 0};
-  //blocks->Setup(uhrzeit);
-  //blocks->draw();
-   //tft->test();
    
-  CheckTime();
+    CheckTime();
 }
 
 void CheckTime() {
@@ -101,12 +95,10 @@ void CheckTime() {
 
 void loop() {
 
-  if (++loopcounter>100) {
-// alle 1 sekunde
+  if (++loopcounter>30) {
   CheckTime();
+  loopcounter=0;
   }
-
-
 
   curBlock = ball->move_draw();  
   blocks->checkBall(ball);

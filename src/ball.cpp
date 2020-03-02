@@ -91,6 +91,7 @@ void Ball::move_draw(int16_t x, int16_t y) {
 
 int16_t Ball::move_draw(void) {
     this->undraw();
+    if (move_x == 0) move_x = 0.5;
     pos_x = pos_x + move_x;
     pos_y = pos_y + move_y;
     if ((pos_x <= 0) || (pos_x >= max_x)) move_x = -move_x;
