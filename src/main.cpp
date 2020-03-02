@@ -11,6 +11,8 @@
 #include "WiFi.h"
 #include <WiFiMulti.h>
 
+#include "../../../wifisetting.h"
+
 // don't forget to set in Console.h debug = none
 
 Screen * tft;
@@ -45,6 +47,14 @@ void setup() {
     if(wifiMulti.run() == WL_CONNECTED) {
          tft->drawText("connected",0,20);
     }
+    else
+    {
+       tft->drawText("try again to connect",0,20);
+        if(wifiMulti.run() == WL_CONNECTED) {
+           tft->drawText("connected now",0,20);
+         }
+    }
+    
 
      struct tm local;
      configTzTime(TZ_INFO, NTP_SERVER); // ESP32 Systemzeit mit NTP Synchronisieren
