@@ -75,7 +75,7 @@ bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
                     // wenn er runtergeht und x und x2 außerhalb, dann noch entweder links oder rechts
 
                     if ((ballsize.y2 > (pos_y+1)) && (ballsize.y < (pos_y+blockheight+1)))
-                        ball->InvertMove(true,false);
+                        ball->InvertMove(false,true);
                     else
                         ball->InvertMove(false,true);
                     
