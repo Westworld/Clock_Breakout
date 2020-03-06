@@ -115,17 +115,8 @@ void loop() {
    
   paddle->update(ball->GetX());
 
-  blocks->draw();
-/*
-  if (curBlock>=0)
-  {
-    blocks->drawBlock(curBlock);  // redraw empty block below moving ball 
-    delay(5);
-  } 
-  else
-    delay(5);
-*/
-    
+  blocks->draw(ball);
+  delay(5);
 
 }
 

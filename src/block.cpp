@@ -42,6 +42,25 @@ void Block::draw(Screen * tft)
     } 
 }
 
+void Block::draw(Screen * tft, Ballsize ballsize)
+{
+    if (used) {
+        if ((ballsize.x < pos_x) && (ballsize.x2 > (pos_x+blockwidth)) 
+            && (ballsize.y < pos_y) && (ballsize.y2 > (pos_y+blockheight)) ) {
+
+            if (active)
+                tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
+            else
+            {
+                //tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_YELLOW2);
+                tft->drawRect(pos_x, pos_y, blockwidth, blockheight, color);
+                tft->drawRect(pos_x+1, pos_y+1, blockwidth-2, blockheight-2, color);
+            }
+        }
+            
+    } 
+}
+
 void Block::undraw(Screen * tft)
 {
     if (used) {
@@ -66,16 +85,14 @@ bool Block::check(Ballsize ballsize, Ball * ball, Screen * tft) {
                 }
                 else
                 {
-                    //Console::info("block x [%d]: y [%d] ", ballsize.movex, ballsize.movey);
-
                     active=false;
                     undraw(tft);
                     //draw(tft);
 
-                    // wenn er runtergeht und x und x2 außerhalb, dann noch entweder links oder rechts
-
-                    if ((ballsize.y2 > (pos_y+1)) && (ballsize.y < (pos_y+blockheight+1)))
-                        ball->InvertMove(false,true);
+                    // if x or x2 is exact on block, dann revert x, else y
+                    // going left                                       going right
+                    if ((int(ballsize.x) == (pos_x+blockwidth)) || (int(ballsize.x2) == (pos_x))|| ((int(ballsize.x2)+1) == (pos_x)))
+                        ball->InvertMove(true,false);
                     else
                         ball->InvertMove(false,true);
                     
