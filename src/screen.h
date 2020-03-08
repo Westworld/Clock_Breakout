@@ -1,9 +1,7 @@
 #ifndef SCREEN_HPP_
 #define SCREEN_HPP_
 
-//#include "Waveshare_ILI9486_GFX.h"
-
-
+#ifdef TARGET_esp32
 #include <SPI.h>          // f.k. for Arduino-1.5.2
 #include "Adafruit_GFX.h"// Hardware-specific library
 #include <MCUFRIEND_kbv.h>
@@ -23,17 +21,51 @@
 #define LCD_D5 16
 #define LCD_D6 27
 #define LCD_D7 14
+#endif
+
+#ifdef TARGET_8266
+#include <SPI.h>
+
+//#define USER_SETUP_LOADED
+/*
+#define RPI_ILI9486_DRIVER
+#define PIN_D5  14  // GPIO14       HSCLK
+#define PIN_D6  12  // GPIO12       HMISO
+#define PIN_D7  13  // GPIO13       HMOSI  RXD2
+#define TFT_CS   PIN_D8  // Chip select control pin D8
+#define TFT_DC   PIN_D3  // Data Command control pin
+#define TFT_RST  PIN_D4  // Reset pin (could connect to NodeMCU RST, see next line)
+
+#define RPI_ILI9486_DRIVER // 20MHz maximum SPI
+*/
+
+//#include <User_Setups/Setup5_RPi_ILI9486.h> 
+
+#include <TFT_eSPI.h> // Hardware-specific library
+
+
+
+
+       // Invoke custom library
+#endif
 
 #define ILI9486_YELLOW      0xFE00 // FFE0
 #define ILI9486_YELLOW2     0xFF34
 #define ILI9486_BLACK       0x0000 
 #define ILI9486_CYAN        0x07FF 
 
+
 class Screen
 {
 private:
     //Waveshare_ILI9486_GFX tft;
+    #ifdef TARGET_esp32
     MCUFRIEND_kbv tft;
+    #endif
+    #ifdef TARGET_8266
+    TFT_eSPI tft = TFT_eSPI();
+    setup_t user;
+    #endif
 
 public:
     Screen(void);
@@ -47,6 +79,7 @@ public:
     void drawText(String text, int16_t x, int16_t y);
     void setRotation(int16_t rot);
     void fillScreen(uint16_t color);
+    int8_t getPinName(int8_t pin);
 };
 
 #endif // SCREEN_HPP_
