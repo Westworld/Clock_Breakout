@@ -1,0 +1,33 @@
+(.../Documents/EAGLE/ulps/pcb-gcode.ulp)
+(Copyright 2005 - 2012 by John Johnson)
+(See readme.txt for licensing terms.)
+(This file generated from the board:)
+(.../ESP8266_Uno_TFT/ESP8266_Unu_TFT.brd)
+(Current profile is .../EAGLE/ulps/profiles/generic.pp  )
+(This file generated 09.03.20 14:28)
+(Settings from pcb-machine.h)
+(  Tool Size)
+(1.3000 )
+(Z Axis Settings)
+(  High     Up        Down     Drill)
+(20.4000 	2.0000 	-0.1500 	-1.9000 )
+(spindle on time = 3.0000)
+(milling depth = -1.3000)
+(text depth = -0.1000)
+(tool change at 0.0000 0.0000 20.4000 )
+(feed rate xy = F208.00 )
+(feed rate z  = F100.00 )
+(Settings from pcb-defaults.h)
+(isolate min = 0.1000)
+(isolate max = 0.5000)
+(isolate step = 0.1000)
+(Generated bottom outlines, bottom drill, )
+(Unit of measure: mm)
+(Metric Mode)
+G21
+(Absolute Coordinates)
+G90
+M03
+G04 P3.000000
+M05
+M02
