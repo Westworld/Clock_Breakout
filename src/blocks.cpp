@@ -112,8 +112,8 @@ void Blocks::draw(Ball * ball)  // only draw blocks close to the ball position
    int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
    int16_t curelement;
    Ballsize thesize = ball->GetSize();
-   thesize.x -= blockwidth; thesize.x2 +=blockwidth;
-   thesize.y -= blockheight; thesize.y2 +=blockheight;
+   thesize.x -=(blockwidth+5); thesize.x2 +=(blockwidth+5);
+   thesize.y -= (blockheight+5); thesize.y2 +=(blockheight+5);
 
    for (int16_t i=0;i<blocksx;i++) {
         for (int16_t j=0; j<blocksy; j++) {

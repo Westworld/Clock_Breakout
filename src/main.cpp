@@ -51,34 +51,15 @@ int16_t loopcounter=0;
 
 void setup() {
 //Serial.begin(115200);
+//Serial.setDebugOutput(true);
 
    tft = new Screen();
    tft->setRotation(1); 
    tft->drawText("Start",0,0);
    delay(1);
    //tft->test();
-
-    WiFi.mode(WIFI_STA);
-    #ifdef TARGET_esp32
-    WiFi.setHostname(wifihostname);
-    #endif
-    #ifdef TARGET_8266
-    WiFi.hostname(wifihostname);
-    #endif
-    wifiMulti.addAP(WIFI_SSID, WIFI_PASS);
-    wifiMulti.addAP(WIFI_SSID2, WIFI_PASS2); 
-    tft->drawText("Connecting Wifi...",0,1);
-    if(wifiMulti.run() == WL_CONNECTED) {
-         tft->drawText("connected",0,20);
-    }
-    else
-    {
-       tft->drawText("try again to connect",0,20);
-        if(wifiMulti.run() == WL_CONNECTED) {
-           tft->drawText("connected now",0,20);
-         }
-    }
-    
+   ConnectWifi();
+       
    #ifdef TARGET_esp32
      struct tm local;
      configTzTime(TZ_INFO, NTP_SERVER); // ESP32 Systemzeit mit NTP Synchronisieren
@@ -112,6 +93,37 @@ void setup() {
    blocks = new Blocks(tft);
    
     CheckTime();
+}
+
+void ConnectWifi() {
+ WiFi.mode(WIFI_STA);
+    #ifdef TARGET_esp32
+    WiFi.setHostname(wifihostname);
+    #endif
+    #ifdef TARGET_8266
+    WiFi.hostname(wifihostname);
+    #endif
+    wifiMulti.addAP(WIFI_SSID, WIFI_PASS);
+    wifiMulti.addAP(WIFI_SSID2, WIFI_PASS2); 
+
+    int loop=1;
+
+    tft->drawText("Connecting Wifi...",0,1);
+
+    while ((loop < 10) && (wifiMulti.run() != WL_CONNECTED)) {
+      tft->drawText("try again to connect",0,20*loop);
+      delay(1000);
+    }
+    if(loop < 10) {
+         tft->drawText("connected",0,20);
+    }
+    else
+    {
+           tft->drawText("NOT CONNECTED ********+",0,20);
+           tft->drawText(WIFI_SSID,0,40);
+           tft->drawText(WIFI_SSID2,0,60);
+           delay(5000);
+    }
 }
 
 void CheckTime() {

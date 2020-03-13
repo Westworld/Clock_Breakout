@@ -1,1 +1,2 @@
 void CheckTime();
+void ConnectWifi();

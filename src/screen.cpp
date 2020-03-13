@@ -24,7 +24,7 @@ Screen::Screen() {
     tft.setRotation(3);
     //LCD_SetArealColor( 0, 0, 300, 300, 0xFFFF);
     tft.fillScreen(ILI9486_BLACK);
-    tft.drawRect(0,0 , 300, 300, ILI9486_CYAN);
+    //tft.drawRect(0,0 , 300, 300, ILI9486_CYAN);
 }
 
 void Screen::setRotation(int16_t rot) {
