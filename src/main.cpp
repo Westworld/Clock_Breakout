@@ -156,7 +156,7 @@ void CheckTime() {
     uhrzeit[2] = cur_min / 10;
     uhrzeit[3] = cur_min % 10;
     tft->fillScreen(ILI9486_BLACK);
-    ball->SetY(10);
+    ball->SetY(20);
     blocks->Setup(uhrzeit);
     blocks->draw();
   }

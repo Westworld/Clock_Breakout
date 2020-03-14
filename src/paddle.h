@@ -8,7 +8,12 @@ class Paddle
 {
 private:
     float pos_x;
+#ifdef TARGET_8266
+    int16_t pos_y=10;
+#endif   
+#ifdef TARGET_esp32
     int16_t pos_y=0;
+#endif 
     int16_t max_x, max_y;
     const int16_t paddlewidth=32;
     const int16_t paddleheight=4;
