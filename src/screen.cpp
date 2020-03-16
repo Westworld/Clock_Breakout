@@ -1,5 +1,6 @@
 #include "Screen.h"
 
+
 #ifdef ESP8266
   ADC_MODE(ADC_VCC); // Read the supply voltage
 #endif
@@ -21,11 +22,14 @@ Screen::Screen() {
     tft.init();
     #endif
  
+    tetris = new TetrisMatrixDraw(tft);
+
     tft.setRotation(3);
     //LCD_SetArealColor( 0, 0, 300, 300, 0xFFFF);
     tft.fillScreen(ILI9486_BLACK);
     //tft.drawRect(0,0 , 300, 300, ILI9486_CYAN);
 }
+
 
 void Screen::setRotation(int16_t rot) {
     tft.setRotation(rot);
@@ -183,3 +187,13 @@ void Screen::drawText(String text, int16_t x, int16_t y) {
 void Screen::fillScreen(uint16_t color) {
     tft.fillScreen(color);
 }
+
+
+
+void Screen::Tetris_setText(String txt, bool forceRefresh) {
+    tetris->setText(txt, forceRefresh);
+}
+
+bool Screen::Tetris_drawText(int x, int y) {
+    return tetris->drawText(x, y);
+}    

@@ -22,6 +22,7 @@
 
 #include <Console.h>
 
+#include <TetrisMatrixDraw.h>
 
 //#include "../../../wifisetting.h"
 
@@ -48,6 +49,12 @@ byte uhrzeit[4] = {1, 2, 3, 0};
 const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
+
+
+// Tetris
+bool twelveHourFormat = true;
+bool forceRefresh = true;
+
 
 void setup() {
 //Serial.begin(115200);
@@ -82,7 +89,13 @@ void setup() {
    delay(2000);
    tft->fillScreen(ILI9486_BLACK);
    tft->setRotation(3);
-   ball = new Ball(tft);
+
+   // tetristest();  // crash!!
+   // serial code einbauen zum feststellen wo?
+
+
+    tft->fillScreen(ILI9486_BLACK);
+    ball = new Ball(tft);
    ball->setAngle(37);
    // winkel setzen, nicht 45°
    // nicht komplett löschen und neu zeichnen, nur untere pixel?
@@ -182,3 +195,10 @@ void loop() {
 }
 
 
+void tetristest() {
+  tft->Tetris_setText("hello world",true);
+
+  while(!(tft->Tetris_drawText(1, 21))) {
+    delay(1);
+  }
+}
