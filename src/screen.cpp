@@ -37,7 +37,7 @@ void Screen::test(void) {
     cy = tft.height();
 
     tft.drawRect(0,0 , cx, cy, ILI9486_CYAN); 
-
+#ifdef TARGET_8266
     tft.getSetup(user); //
 
 Serial.printf("\n[code]\n");
@@ -122,11 +122,13 @@ if (user.serial==1)          Serial.printf("Display SPI frequency = %2.1f MHz \n
 if (user.pin_tch_cs != -1)   Serial.printf("Touch SPI frequency   = %2.1f MHz \n", user.tch_spi_freq/10.0);
 
 Serial.printf("[/code]\n");
+#endif
 }
 
 // Get pin name for ESP8266
 int8_t Screen::getPinName(int8_t pin)
 {
+    #ifdef TARGET_8266
   // For ESP32 pin labels on boards use the GPIO number
   if (user.esp == 32) return pin;
 
@@ -146,7 +148,7 @@ int8_t Screen::getPinName(int8_t pin)
   if (pin ==  1) return 10;
   if (pin ==  9) return 11;
   if (pin == 10) return 12;
-
+#endif
   return -1; // Invalid pin
 }
 
