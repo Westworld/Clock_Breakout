@@ -92,7 +92,7 @@ void setup() {
 
    blocks = new Blocks(tft);
    
-    CheckTime();
+   CheckTime();
 }
 
 void ConnectWifi() {
