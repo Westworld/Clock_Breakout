@@ -26,6 +26,7 @@
 
 #ifdef TARGET_8266
 #include <SPI.h>
+#include <TetrisMatrixDraw.h>
 
 //#define USER_SETUP_LOADED
 /*

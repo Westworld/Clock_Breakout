@@ -90,7 +90,7 @@ void setup() {
    tft->fillScreen(ILI9486_BLACK);
    tft->setRotation(3);
 
-   // tetristest();  // crash!!
+   //tetristest();  // crash!!
    // serial code einbauen zum feststellen wo?
 
 
