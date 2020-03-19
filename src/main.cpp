@@ -90,10 +90,10 @@ void setup() {
    tft->fillScreen(ILI9486_BLACK);
    tft->setRotation(3);
 
-   //tetristest();  // crash!!
+   tetristest();  // crash!!
    // serial code einbauen zum feststellen wo?
 
-
+    tft->setRotation(3);
     tft->fillScreen(ILI9486_BLACK);
     ball = new Ball(tft);
    ball->setAngle(37);
@@ -106,6 +106,7 @@ void setup() {
    blocks = new Blocks(tft);
    
    CheckTime();
+   
 }
 
 void ConnectWifi() {
@@ -196,9 +197,15 @@ void loop() {
 
 
 void tetristest() {
-  tft->Tetris_setText("hello world",true);
+  tft->setRotation(1);
+  tft->Tetris_DrawChar("ein test", 50, 50, ILI9486_WHITE);
+  delay(1000);
 
-  while(!(tft->Tetris_drawText(1, 21))) {
+  tft->Tetris_setText("HELLO",false);
+
+  while(!(tft->Tetris_drawText(20, 50))) {
     delay(1);
   }
+
+    delay(5000);
 }

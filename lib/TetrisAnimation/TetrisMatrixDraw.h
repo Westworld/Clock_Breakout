@@ -63,7 +63,7 @@ class TetrisMatrixDraw
         void drawColon(int x, int y, uint16_t colonColour);
         int calculateWidth();
         bool _debug = false;
-        int scale = 1;
+        int scale = 10;
         bool drawOutline = false;
         uint16_t outLineColour = 0x0000;
 

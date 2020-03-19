@@ -197,3 +197,11 @@ void Screen::Tetris_setText(String txt, bool forceRefresh) {
 bool Screen::Tetris_drawText(int x, int y) {
     return tetris->drawText(x, y);
 }    
+
+ void Screen::Tetris_DrawChar(String letter, uint8_t x, uint8_t y, uint16_t color) {
+     tetris->drawChar(letter,  x,  y,  color);
+ }
+
+ void Screen::Tetris_drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot) {
+     tetris->drawLargerShape(10, blocktype,  color,  x_pos,  y_pos,  num_rot);
+ }

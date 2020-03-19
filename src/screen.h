@@ -86,6 +86,8 @@ public:
 
     void Tetris_setText(String txt, bool forceRefresh);
     bool Tetris_drawText(int x, int y);
+    void Tetris_DrawChar(String letter, uint8_t x, uint8_t y, uint16_t color);
+    void Tetris_drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot);
 };
 
 #endif // SCREEN_HPP_
