@@ -198,6 +198,10 @@ bool Screen::Tetris_drawText(int x, int y) {
     return tetris->drawText(x, y);
 }    
 
+bool Screen::Tetris_drawText(int x, int y, int color) {
+    return tetris->drawText(x, y, color);
+}  
+
  void Screen::Tetris_DrawChar(String letter, uint8_t x, uint8_t y, uint16_t color) {
      tetris->drawChar(letter,  x,  y,  color);
  }

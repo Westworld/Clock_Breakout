@@ -205,9 +205,9 @@ void tetristest() {
 
   tft->Tetris_setText("HELLO",false);
 
-  while(!(tft->Tetris_drawText(60, 250))) {
+  while(!(tft->Tetris_drawText(60, 250, -1))) {
     delay(20);
-    tft->fillScreen(ILI9486_BLACK);
+    tft->Tetris_drawText(60, 250, ILI9486_BLACK);
 
     // instead of fill screen, we should draw all previous blocks (not fully fallen) in black
 
