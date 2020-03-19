@@ -62,6 +62,7 @@ void setup() {
 
    tft = new Screen();
    tft->setRotation(1); 
+   tft->fillScreen(ILI9486_BLACK);
    tft->drawText("Start",0,0);
    delay(1);
    //tft->test();
@@ -198,13 +199,18 @@ void loop() {
 
 void tetristest() {
   tft->setRotation(1);
+  tft->fillScreen(ILI9486_BLACK);
   tft->Tetris_DrawChar("ein test", 50, 50, ILI9486_WHITE);
   delay(1000);
 
   tft->Tetris_setText("HELLO",false);
 
-  while(!(tft->Tetris_drawText(20, 50))) {
-    delay(1);
+  while(!(tft->Tetris_drawText(60, 250))) {
+    delay(20);
+    tft->fillScreen(ILI9486_BLACK);
+
+    // instead of fill screen, we should draw all previous blocks (not fully fallen) in black
+
   }
 
     delay(5000);

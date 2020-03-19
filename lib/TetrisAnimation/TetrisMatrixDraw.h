@@ -53,6 +53,7 @@ class TetrisMatrixDraw
         #endif
         bool drawNumbers(int x = 0, int y = 0, bool displayColon = false);
         bool drawText(int x = 0, int y = 0);
+        bool drawText(int x, int yFinish, int color);
         void drawChar(String letter, uint8_t x, uint8_t y, uint16_t color);
         void drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot);
         void drawLargerShape(int scale, int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot);
