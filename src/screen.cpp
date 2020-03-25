@@ -209,3 +209,19 @@ bool Screen::Tetris_drawText(int x, int y, int color) {
  void Screen::Tetris_drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot) {
      tetris->drawLargerShape(10, blocktype,  color,  x_pos,  y_pos,  num_rot);
  }
+
+void Screen::Tetris_setNumbers(long nummer) {
+     tetris->setNumbers(nummer);
+ }
+
+bool Screen::Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon){
+     return tetris->drawNumbers(x_pos,y_pos, drawColon);
+ }
+
+bool Screen::Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon, int color) {
+     return tetris->drawNumbers(x_pos,y_pos, drawColon, color);
+ }
+
+void Screen::Tetris_setTime(char * timeString) {
+    tetris->setTime(timeString);
+}

@@ -861,9 +861,142 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon)
   {
     this->drawColon(x, y, this->tetrisWHITE);
   }
+  else
+  {
+    this->drawColon(x, y, this->tetrisBLACK);
+  }
 
   return finishedAnimating;
 }
+
+
+// color = -1 -> draw automatic color, but don't increase
+// color # -1 -> draw given color (usually black), increase position 
+bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon, int color)
+{
+  // For each number position
+  bool finishedAnimating = true;
+  int thecolor;
+
+  int scaledYOffset = (this->scale > 1) ? this->scale : 1;
+  int y = yFinish - (TETRIS_Y_DROP_DEFAULT * this->scale);
+
+  for (int numpos = 0; numpos < this->sizeOfValue; numpos++)
+  {
+    if(numstates[numpos].num_to_draw >= 0) 
+    {
+      // Draw falling shape
+      if (numstates[numpos].blockindex < blocksPerNumber[numstates[numpos].num_to_draw])
+      {
+        finishedAnimating = false;
+        fall_instr current_fall = getFallinstrByNum(numstates[numpos].num_to_draw, numstates[numpos].blockindex);
+
+        // Handle variations of rotations
+        uint8_t rotations = current_fall.num_rot;
+        if (rotations == 1)
+        {
+          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 2))
+          {
+            rotations = 0;
+          }
+        }
+        if (rotations == 2)
+        {
+          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 3))
+          {
+            rotations = 0;
+          }
+          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 3 * 2))
+          {
+            rotations = 1;
+          }
+        }
+        if (rotations == 3)
+        {
+          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4))
+          {
+            rotations = 0;
+          }
+          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4 * 2))
+          {
+            rotations = 1;
+          }
+          if (numstates[numpos].fallindex < (int)(current_fall.y_stop / 4 * 3))
+          {
+            rotations = 2;
+          }
+        }
+
+        if (color != -1) 
+          thecolor = 0x0;  // black
+        else
+          thecolor =this->tetrisColors[current_fall.color];
+          
+        if(this->scale <= 1){
+          drawShape(current_fall.blocktype, 
+                    thecolor,
+                    x + current_fall.x_pos + numstates[numpos].x_shift, 
+                    y + numstates[numpos].fallindex - scaledYOffset, 
+                    rotations);
+        } else {
+          drawLargerShape(this->scale, 
+                          current_fall.blocktype, 
+                          thecolor, 
+                          x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift, 
+                          y + (numstates[numpos].fallindex * scaledYOffset) - scaledYOffset, 
+                          rotations);
+        }
+
+        if (color != -1) 
+          numstates[numpos].fallindex++;
+
+        if (numstates[numpos].fallindex > current_fall.y_stop)
+        {
+          numstates[numpos].fallindex = 0;
+          numstates[numpos].blockindex++;
+        }
+      }
+
+if (color==-1) {
+      // Draw already dropped shapes
+      if (numstates[numpos].blockindex > 0)
+      {
+        for (int i = 0; i < numstates[numpos].blockindex; i++)
+        {
+          fall_instr fallen_block = getFallinstrByNum(numstates[numpos].num_to_draw, i);
+          if(this->scale <= 1){
+            drawShape(fallen_block.blocktype, 
+                      this->tetrisColors[fallen_block.color], 
+                      x + fallen_block.x_pos + numstates[numpos].x_shift, 
+                      y + fallen_block.y_stop - 1, 
+                      fallen_block.num_rot);
+          } else {
+            drawLargerShape(this->scale, 
+                            fallen_block.blocktype, 
+                            this->tetrisColors[fallen_block.color], 
+                            x + (fallen_block.x_pos * this->scale) + numstates[numpos].x_shift, 
+                            y + (fallen_block.y_stop * scaledYOffset) - scaledYOffset, 
+                            fallen_block.num_rot);
+          }
+        }
+      }
+    }
+  }
+  }
+
+  if (displayColon)
+  {
+    this->drawColon(x, y, this->tetrisWHITE);
+  }
+  else
+  {
+    this->drawColon(x, y, this->tetrisBLACK);
+  }
+  
+
+  return finishedAnimating;
+}
+
 
 void TetrisMatrixDraw::drawColon(int x, int y, uint16_t colonColour){
   int colonSize = 2 * this->scale;

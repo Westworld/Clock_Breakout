@@ -51,7 +51,8 @@ class TetrisMatrixDraw
         TetrisMatrixDraw (Adafruit_GFX  &display);
         Adafruit_GFX  *display;
         #endif
-        bool drawNumbers(int x = 0, int y = 0, bool displayColon = false);
+        bool drawNumbers(int x, int y, bool displayColon);
+        bool drawNumbers(int x, int y, bool displayColon, int color);
         bool drawText(int x = 0, int y = 0);
         bool drawText(int x, int yFinish, int color);
         void drawChar(String letter, uint8_t x, uint8_t y, uint16_t color);
@@ -64,7 +65,7 @@ class TetrisMatrixDraw
         void drawColon(int x, int y, uint16_t colonColour);
         int calculateWidth();
         bool _debug = false;
-        int scale = 10;
+        int scale = 13;
         bool drawOutline = false;
         uint16_t outLineColour = 0x0000;
 

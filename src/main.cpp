@@ -76,7 +76,7 @@ void setup() {
    #ifdef TARGET_8266
      time_t now;
      struct tm * timeinfo;
-    configTime(1 * 3600, 0, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
+     configTime(1 * 3600, 0, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
      tft->drawText("waiting for time",0,30);
      while (!time(nullptr)) {
         Serial.print(".");
@@ -91,8 +91,9 @@ void setup() {
    tft->fillScreen(ILI9486_BLACK);
    tft->setRotation(3);
 
-   tetristest();  // crash!!
-   // serial code einbauen zum feststellen wo?
+   for (short i=0; i<10; i++)
+    tetristest(); 
+   
 
     tft->setRotation(3);
     tft->fillScreen(ILI9486_BLACK);
@@ -141,28 +142,38 @@ void ConnectWifi() {
     }
 }
 
-void CheckTime() {
-   #ifdef TARGET_esp32
+void GetTime( int16_t &hour, int16_t &min, int16_t &sec) {
+#ifdef TARGET_esp32
   struct tm timeinfo;
   if(!getLocalTime(&timeinfo)){
     tft->drawText("Failed to obtain time",0,0);
     timeinfo.tm_hour=12;
     timeinfo.tm_min=30;
   }
-  int16_t cur_hour = timeinfo.tm_hour;
-  int16_t cur_min  = timeinfo.tm_min;
+  hour = timeinfo.tm_hour;
+  min  = timeinfo.tm_min;
+  sec = timeinfo.tm_sec;
    #endif
    #ifdef TARGET_8266
      time_t now;
      struct tm * timeinfo;
      time(&now);
      timeinfo = localtime(&now); 
-     int16_t cur_hour = timeinfo->tm_hour;
-     int16_t cur_min  = timeinfo->tm_min;
+     hour = timeinfo->tm_hour;
+     min  = timeinfo->tm_min;
+     sec = timeinfo->tm_sec;
    #endif
+}
 
 
-  
+
+void CheckTime() {
+  int16_t cur_hour;
+  int16_t cur_min;
+  int16_t cur_sec;
+  GetTime( cur_hour,cur_min, cur_sec);
+
+
   if ((cur_hour != last_hour) || (cur_min != last_min)) {
     last_hour = cur_hour;
     last_min = cur_min;
@@ -200,18 +211,39 @@ void loop() {
 void tetristest() {
   tft->setRotation(1);
   tft->fillScreen(ILI9486_BLACK);
-  tft->Tetris_DrawChar("ein test", 50, 50, ILI9486_WHITE);
-  delay(1000);
-
-  tft->Tetris_setText("HELLO",false);
-
+ 
+  /*tft->Tetris_setText("HELLO",false);
+  tft->Tetris_drawText(60, 250, -1);
+  
   while(!(tft->Tetris_drawText(60, 250, -1))) {
     delay(20);
     tft->Tetris_drawText(60, 250, ILI9486_BLACK);
-
-    // instead of fill screen, we should draw all previous blocks (not fully fallen) in black
-
   }
+  */
 
-    delay(5000);
+  int16_t cur_hour;
+  int16_t cur_min;
+  int16_t cur_sec;
+  GetTime( cur_hour,cur_min, cur_sec);
+
+    uhrzeit[0] = cur_hour / 10;
+    uhrzeit[1] = cur_hour % 10;
+    uhrzeit[2] = cur_min / 10;
+    uhrzeit[3] = cur_min % 10;
+  //long nummer = (uhrzeit[0] *1000) + (uhrzeit[1]*100 ) + (uhrzeit[2]*10 ) + (uhrzeit[3] );
+  //tft->Tetris_setNumbers(nummer);
+  
+  char timeString [8];
+  sprintf(timeString, "%d%d:%d%d", uhrzeit[0], uhrzeit[1], uhrzeit[2], uhrzeit[3]);
+  tft->Tetris_setTime(timeString);
+  
+  bool displaycolon = false;
+  while(!(tft->Tetris_drawNumbers(60,250, displaycolon, -1))) {
+    delay(20);
+    GetTime( cur_hour,cur_min, cur_sec);
+    displaycolon = ((cur_sec % 2) == 1);
+
+    tft->Tetris_drawNumbers(60,250, displaycolon, ILI9486_BLACK);
+  }
+     delay(5000);
 }
