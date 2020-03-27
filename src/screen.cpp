@@ -223,5 +223,5 @@ bool Screen::Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon, int color)
  }
 
 void Screen::Tetris_setTime(char * timeString) {
-    tetris->setTime(timeString);
+    tetris->setTime(timeString, true);
 }
