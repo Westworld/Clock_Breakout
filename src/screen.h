@@ -34,14 +34,16 @@
 #define PIN_D5  14  // GPIO14       HSCLK
 #define PIN_D6  12  // GPIO12       HMISO
 #define PIN_D7  13  // GPIO13       HMOSI  RXD2
-#define TFT_CS   PIN_D8  // Chip select control pin D8
-#define TFT_DC   PIN_D3  // Data Command control pin
-#define TFT_RST  PIN_D4  // Reset pin (could connect to NodeMCU RST, see next line)
+#define TFT_CS   PIN_D8  // GPIO15  Chip select control pin D8
+#define TFT_DC   PIN_D3  // GPIO0   Data Command control pin
+#define TFT_RST  PIN_D4  // GPIO2   Reset pin (could connect to NodeMCU RST, see next line)
 
 #define RPI_ILI9486_DRIVER // 20MHz maximum SPI
 */
 
-//#include <User_Setups/Setup5_RPi_ILI9486.h> 
+//#include <User_Setups/Setup5_RPi_ILI9486.h>   // für 4" Waveshare
+
+// #include <User_Setups/Setup20_ILI9488.h>   // für 4" noname
 
 #include <TFT_eSPI.h> // Hardware-specific library
 
