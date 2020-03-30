@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 #define TETRIS_MAX_NUMBERS 9
 
-#define TETRIS_DISTANCE_BETWEEN_DIGITS 7
+#define TETRIS_DISTANCE_BETWEEN_DIGITS 9
 #define TETRIS_Y_DROP_DEFAULT 16
 
 // Type that describes the current state of a drawn number
@@ -65,7 +65,7 @@ class TetrisMatrixDraw
         void drawColon(int x, int y, uint16_t colonColour);
         int calculateWidth();
         bool _debug = false;
-        int scale = 13;
+        int scale = 12;
         bool drawOutline = false;
         uint16_t outLineColour = 0x0000;
 

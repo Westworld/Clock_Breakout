@@ -79,7 +79,7 @@ void setup() {
    #ifdef TARGET_8266
      time_t now;
      struct tm * timeinfo;
-     configTime(1 * 3600, 0, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
+     configTime(1 * 3600, 1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
      tft->drawText("waiting for time",0,30);
      while (!time(nullptr)) {
         Serial.print(".");
@@ -232,19 +232,19 @@ void InitTetris() {
   tft->Tetris_setTime(timeString);
 
   bool displaycolon = false;
-  while(!(tft->Tetris_drawNumbers(60,250, displaycolon, -1))) {
-    delay(20);
+  while(!(tft->Tetris_drawNumbers(40,250, displaycolon, -1))) {
+    delay(45);
     yield();
     GetTime();
 
     displaycolon = ((uhrzeit[5] % 2) == 1);
-    tft->Tetris_drawNumbers(60,250, displaycolon, ILI9486_BLACK);
+    tft->Tetris_drawNumbers(40,250, displaycolon, ILI9486_BLACK);
   }
 }
 
 void PlayTetris() {
   bool displaycolon = ((uhrzeit[5] % 2) == 1);
-  tft->Tetris_drawNumbers(60,250, displaycolon, -1);
+  tft->Tetris_drawNumbers(40,250, displaycolon, -1);
 }
 
 void loop() {

@@ -1000,7 +1000,7 @@ if (color==-1) {
 
 void TetrisMatrixDraw::drawColon(int x, int y, uint16_t colonColour){
   int colonSize = 2 * this->scale;
-  int xColonPos = x + (TETRIS_DISTANCE_BETWEEN_DIGITS * 2 * this->scale);  
+  int xColonPos = x + (TETRIS_DISTANCE_BETWEEN_DIGITS * 2 * this->scale) -10;  
   display->fillRect(xColonPos, y + (12 * this->scale), colonSize, colonSize, colonColour);
   display->fillRect(xColonPos, y + (8 * this->scale), colonSize, colonSize, colonColour);
 }
