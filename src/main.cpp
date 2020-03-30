@@ -22,6 +22,7 @@
 
 #include <Console.h>
 
+#include <TetrisMatrixDraw.h>
 
 //#include "../../../wifisetting.h"
 
@@ -32,6 +33,8 @@ Ball * ball;
 Paddle * paddle;
 Blocks * blocks;
 
+short GameType = -1;  // 0 = Arkonid, 1 = Tetris
+
 #ifdef TARGET_esp32
 WiFiMulti wifiMulti;
 #endif
@@ -39,9 +42,10 @@ WiFiMulti wifiMulti;
 ESP8266WiFiMulti wifiMulti;
 #endif
 
-byte uhrzeit[4] = {1, 2, 3, 0};
+byte uhrzeit[6] = {1, 2, 3, 0, 0, 0};
   int16_t last_hour = -1;
   int16_t last_min  = -1;
+  int16_t last_sec  = -1;
 
 #define NTP_SERVER "de.pool.ntp.org"
 #define TZ_INFO "WEST-1DWEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00" // Western European Time
@@ -49,12 +53,19 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
+
+// Tetris
+bool twelveHourFormat = true;
+bool forceRefresh = true;
+
+
 void setup() {
 //Serial.begin(115200);
 //Serial.setDebugOutput(true);
 
    tft = new Screen();
    tft->setRotation(1); 
+   tft->fillScreen(ILI9486_BLACK);
    tft->drawText("Start",0,0);
    delay(1);
    //tft->test();
@@ -68,7 +79,7 @@ void setup() {
    #ifdef TARGET_8266
      time_t now;
      struct tm * timeinfo;
-    configTime(1 * 3600, 0, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
+     configTime(1 * 3600, 1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
      tft->drawText("waiting for time",0,30);
      while (!time(nullptr)) {
         Serial.print(".");
@@ -82,18 +93,23 @@ void setup() {
    delay(2000);
    tft->fillScreen(ILI9486_BLACK);
    tft->setRotation(3);
+
+   //for (short i=0; i<3; i++)
+   // tetristest(); 
+   
    ball = new Ball(tft);
    ball->setAngle(37);
    // winkel setzen, nicht 45°
    // nicht komplett löschen und neu zeichnen, nur untere pixel?
 
    paddle = new Paddle(tft);
-   paddle->draw();
-
    blocks = new Blocks(tft);
    
-    CheckTime();
+   CheckTime();
+   
 }
+
+
 
 void ConnectWifi() {
  WiFi.mode(WIFI_STA);
@@ -126,43 +142,110 @@ void ConnectWifi() {
     }
 }
 
-void CheckTime() {
-   #ifdef TARGET_esp32
+void GetTime( int16_t &hour, int16_t &min, int16_t &sec) {
+#ifdef TARGET_esp32
   struct tm timeinfo;
   if(!getLocalTime(&timeinfo)){
     tft->drawText("Failed to obtain time",0,0);
     timeinfo.tm_hour=12;
     timeinfo.tm_min=30;
   }
-  int16_t cur_hour = timeinfo.tm_hour;
-  int16_t cur_min  = timeinfo.tm_min;
+  hour = timeinfo.tm_hour;
+  min  = timeinfo.tm_min;
+  sec = timeinfo.tm_sec;
    #endif
    #ifdef TARGET_8266
      time_t now;
      struct tm * timeinfo;
      time(&now);
      timeinfo = localtime(&now); 
-     int16_t cur_hour = timeinfo->tm_hour;
-     int16_t cur_min  = timeinfo->tm_min;
+     hour = timeinfo->tm_hour;
+     min  = timeinfo->tm_min;
+     sec = timeinfo->tm_sec;
    #endif
 
+    uhrzeit[0] = hour / 10;
+    uhrzeit[1] = hour % 10;
+    uhrzeit[2] = min / 10;
+    uhrzeit[3] = min % 10;
+    uhrzeit[4] = sec / 10;
+    uhrzeit[5] = sec % 10;
+}
 
-  
+void GetTime() {
+  int16_t cur_hour;
+  int16_t cur_min;
+  int16_t cur_sec;
+  GetTime( cur_hour,cur_min, cur_sec);
+}
+
+void CheckTime() {
+  int16_t cur_hour;
+  int16_t cur_min;
+  int16_t cur_sec;
+  GetTime( cur_hour,cur_min, cur_sec);
+
   if ((cur_hour != last_hour) || (cur_min != last_min)) {
+
+    int16_t newgame = uhrzeit[2] % 2;  // 1
+  
+      GameType = newgame;
+       switch (GameType) {
+        case 0: 
+          InitArkonid();
+          break;
+        case 1: 
+          InitTetris();
+          break;
+        default:
+          // nothing 
+          ;
+        }   
     last_hour = cur_hour;
     last_min = cur_min;
-    uhrzeit[0] = cur_hour / 10;
-    uhrzeit[1] = cur_hour % 10;
-    uhrzeit[2] = cur_min / 10;
-    uhrzeit[3] = cur_min % 10;
+    last_sec = cur_sec;
+  }
+}
+
+void InitArkonid() {
+    tft->setRotation(3);
     tft->fillScreen(ILI9486_BLACK);
+    paddle->draw();
     ball->SetY(20);
     blocks->Setup(uhrzeit);
     blocks->draw();
-  }
-  
 }
 
+void PlayArkonid() {
+  curBlock = ball->move_draw();  
+  blocks->checkBall(ball);
+   
+  paddle->update(ball->GetX());
+  blocks->draw(ball);
+}
+
+void InitTetris() {
+  tft->setRotation(1);
+  tft->fillScreen(ILI9486_BLACK);
+  char timeString [8];
+  sprintf(timeString, "%d%d:%d%d", uhrzeit[0], uhrzeit[1], uhrzeit[2], uhrzeit[3]);
+  tft->Tetris_setTime(timeString);
+
+  bool displaycolon = false;
+  while(!(tft->Tetris_drawNumbers(40,250, displaycolon, -1))) {
+    delay(45);
+    yield();
+    GetTime();
+
+    displaycolon = ((uhrzeit[5] % 2) == 1);
+    tft->Tetris_drawNumbers(40,250, displaycolon, ILI9486_BLACK);
+  }
+}
+
+void PlayTetris() {
+  bool displaycolon = ((uhrzeit[5] % 2) == 1);
+  tft->Tetris_drawNumbers(40,250, displaycolon, -1);
+}
 
 void loop() {
 
@@ -171,14 +254,59 @@ void loop() {
   loopcounter=0;
   }
 
-  curBlock = ball->move_draw();  
-  blocks->checkBall(ball);
-   
-  paddle->update(ball->GetX());
+  switch (GameType) {
+     case 0: 
+      PlayArkonid();
+      break;
+    case 1: 
+      PlayTetris();
+      break;    
+    default:
+      // nothing 
+      ;
+  }   
 
-  blocks->draw(ball);
   delay(5);
-
+  yield();
 }
 
 
+void tetristest() {
+  tft->setRotation(1);
+  tft->fillScreen(ILI9486_BLACK);
+ 
+  /*tft->Tetris_setText("HELLO",false);
+  tft->Tetris_drawText(60, 250, -1);
+  
+  while(!(tft->Tetris_drawText(60, 250, -1))) {
+    delay(20);
+    tft->Tetris_drawText(60, 250, ILI9486_BLACK);
+  }
+  */
+
+  int16_t cur_hour;
+  int16_t cur_min;
+  int16_t cur_sec;
+  GetTime( cur_hour,cur_min, cur_sec);
+
+    uhrzeit[0] = cur_hour / 10;
+    uhrzeit[1] = cur_hour % 10;
+    uhrzeit[2] = cur_min / 10;
+    uhrzeit[3] = cur_min % 10;
+  //long nummer = (uhrzeit[0] *1000) + (uhrzeit[1]*100 ) + (uhrzeit[2]*10 ) + (uhrzeit[3] );
+  //tft->Tetris_setNumbers(nummer);
+  
+  char timeString [8];
+  sprintf(timeString, "%d%d:%d%d", uhrzeit[0], uhrzeit[1], uhrzeit[2], uhrzeit[3]);
+  tft->Tetris_setTime(timeString);
+  
+  bool displaycolon = false;
+  while(!(tft->Tetris_drawNumbers(60,250, displaycolon, -1))) {
+    delay(20);
+    GetTime( cur_hour,cur_min, cur_sec);
+    displaycolon = ((cur_sec % 2) == 1);
+
+    tft->Tetris_drawNumbers(60,250, displaycolon, ILI9486_BLACK);
+  }
+     delay(5000);
+}

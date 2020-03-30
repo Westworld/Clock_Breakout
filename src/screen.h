@@ -5,6 +5,7 @@
 #include <SPI.h>          // f.k. for Arduino-1.5.2
 #include "Adafruit_GFX.h"// Hardware-specific library
 #include <MCUFRIEND_kbv.h>
+#include <TetrisMatrixDraw.h>
 
   //regular UNO shield on TTGO D1 R32 (ESP32)
 #define LCD_RD  2  //LED
@@ -25,6 +26,7 @@
 
 #ifdef TARGET_8266
 #include <SPI.h>
+#include <TetrisMatrixDraw.h>
 
 //#define USER_SETUP_LOADED
 /*
@@ -66,6 +68,7 @@ private:
     TFT_eSPI tft = TFT_eSPI();
     setup_t user;
     #endif
+    TetrisMatrixDraw * tetris;
 
 public:
     Screen(void);
@@ -80,6 +83,18 @@ public:
     void setRotation(int16_t rot);
     void fillScreen(uint16_t color);
     int8_t getPinName(int8_t pin);
+
+    void Tetris_setText(String txt, bool forceRefresh);
+    bool Tetris_drawText(int x, int y);
+    bool Tetris_drawText(int x, int y, int color);
+    void Tetris_setNumbers(long nummer);
+    void Tetris_setTime(char * timeString);
+    bool Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon);
+    bool Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon, int color);
+    void Tetris_DrawChar(String letter, uint8_t x, uint8_t y, uint16_t color);
+    void Tetris_drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot);
+
+
 };
 
 #endif // SCREEN_HPP_

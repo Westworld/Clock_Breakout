@@ -1,5 +1,6 @@
 #include "Screen.h"
 
+
 #ifdef ESP8266
   ADC_MODE(ADC_VCC); // Read the supply voltage
 #endif
@@ -21,11 +22,14 @@ Screen::Screen() {
     tft.init();
     #endif
  
+    tetris = new TetrisMatrixDraw(tft);
+
     tft.setRotation(3);
     //LCD_SetArealColor( 0, 0, 300, 300, 0xFFFF);
     tft.fillScreen(ILI9486_BLACK);
     //tft.drawRect(0,0 , 300, 300, ILI9486_CYAN);
 }
+
 
 void Screen::setRotation(int16_t rot) {
     tft.setRotation(rot);
@@ -182,4 +186,42 @@ void Screen::drawText(String text, int16_t x, int16_t y) {
 
 void Screen::fillScreen(uint16_t color) {
     tft.fillScreen(color);
+}
+
+
+
+void Screen::Tetris_setText(String txt, bool forceRefresh) {
+    tetris->setText(txt, forceRefresh);
+}
+
+bool Screen::Tetris_drawText(int x, int y) {
+    return tetris->drawText(x, y);
+}    
+
+bool Screen::Tetris_drawText(int x, int y, int color) {
+    return tetris->drawText(x, y, color);
+}  
+
+ void Screen::Tetris_DrawChar(String letter, uint8_t x, uint8_t y, uint16_t color) {
+     tetris->drawChar(letter,  x,  y,  color);
+ }
+
+ void Screen::Tetris_drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot) {
+     tetris->drawLargerShape(10, blocktype,  color,  x_pos,  y_pos,  num_rot);
+ }
+
+void Screen::Tetris_setNumbers(long nummer) {
+     tetris->setNumbers(nummer);
+ }
+
+bool Screen::Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon){
+     return tetris->drawNumbers(x_pos,y_pos, drawColon);
+ }
+
+bool Screen::Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon, int color) {
+     return tetris->drawNumbers(x_pos,y_pos, drawColon, color);
+ }
+
+void Screen::Tetris_setTime(char * timeString) {
+    tetris->setTime(timeString, true);
 }
