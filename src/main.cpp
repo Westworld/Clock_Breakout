@@ -60,7 +60,7 @@ bool forceRefresh = true;
 
 
 void setup() {
-//Serial.begin(115200);
+Serial.begin(115200);
 //Serial.setDebugOutput(true);
 
    tft = new Screen();
@@ -238,8 +238,9 @@ void InitTetris() {
     GetTime();
 
     displaycolon = ((uhrzeit[5] % 2) == 1);
-    tft->Tetris_drawNumbers(40,250, displaycolon, ILI9486_BLACK);
+    //tft->Tetris_drawNumbers(40,250, displaycolon, ILI9486_BLACK);
   }
+  //tft->Tetris_drawNumbers(40,250, displaycolon, -2);
 }
 
 void PlayTetris() {

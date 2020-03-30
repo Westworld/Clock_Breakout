@@ -454,6 +454,7 @@ void TetrisMatrixDraw::setNumState(int index, int value, int x_shift)
 {
     if(index < TETRIS_MAX_NUMBERS) {
       Serial.println(value);
+
         this->numstates[index].num_to_draw = value;
         this->numstates[index].x_shift = x_shift;
         this->numstates[index].fallindex = 0;
@@ -831,29 +832,6 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon)
           numstates[numpos].blockindex++;
         }
       }
-
-      // Draw already dropped shapes
-      if (numstates[numpos].blockindex > 0)
-      {
-        for (int i = 0; i < numstates[numpos].blockindex; i++)
-        {
-          fall_instr fallen_block = getFallinstrByNum(numstates[numpos].num_to_draw, i);
-          if(this->scale <= 1){
-            drawShape(fallen_block.blocktype, 
-                      this->tetrisColors[fallen_block.color], 
-                      x + fallen_block.x_pos + numstates[numpos].x_shift, 
-                      y + fallen_block.y_stop - 1, 
-                      fallen_block.num_rot);
-          } else {
-            drawLargerShape(this->scale, 
-                            fallen_block.blocktype, 
-                            this->tetrisColors[fallen_block.color], 
-                            x + (fallen_block.x_pos * this->scale) + numstates[numpos].x_shift, 
-                            y + (fallen_block.y_stop * scaledYOffset) - scaledYOffset, 
-                            fallen_block.num_rot);
-          }
-        }
-      }
     }
   }
 
@@ -885,6 +863,13 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon, int co
   {
     if(numstates[numpos].num_to_draw >= 0) 
     {
+       // erase previous block
+        if ((numstates[numpos].fallindex != 0)) {
+           drawLargerShape(numstates[numpos].scale, numstates[numpos].blocktype, tetrisBLACK, numstates[numpos].x_pos, numstates[numpos].y_pos, numstates[numpos].num_rot);
+        }
+
+
+
       // Draw falling shape
       if (numstates[numpos].blockindex < blocksPerNumber[numstates[numpos].num_to_draw])
       {
@@ -927,28 +912,23 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon, int co
           }
         }
 
-        if (color != -1) 
-          thecolor = 0x0;  // black
-        else
-          thecolor =this->tetrisColors[current_fall.color];
+        thecolor =this->tetrisColors[current_fall.color];
           
-        if(this->scale <= 1){
-          drawShape(current_fall.blocktype, 
-                    thecolor,
-                    x + current_fall.x_pos + numstates[numpos].x_shift, 
-                    y + numstates[numpos].fallindex - scaledYOffset, 
-                    rotations);
-        } else {
-          drawLargerShape(this->scale, 
+        
+            numstates[numpos].scale = this->scale;
+            numstates[numpos].blocktype = current_fall.blocktype, 
+            numstates[numpos].x_pos =  x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift;
+            numstates[numpos].y_pos =  y + (numstates[numpos].fallindex * scaledYOffset) - scaledYOffset;
+            numstates[numpos].num_rot = rotations;
+
+        drawLargerShape(this->scale, 
                           current_fall.blocktype, 
                           thecolor, 
                           x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift, 
                           y + (numstates[numpos].fallindex * scaledYOffset) - scaledYOffset, 
                           rotations);
-        }
 
-        if (color != -1) 
-          numstates[numpos].fallindex++;
+        numstates[numpos].fallindex++;
 
         if (numstates[numpos].fallindex > current_fall.y_stop)
         {
@@ -956,32 +936,7 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon, int co
           numstates[numpos].blockindex++;
         }
       }
-
-if (color==-1) {
-      // Draw already dropped shapes
-      if (numstates[numpos].blockindex > 0)
-      {
-        for (int i = 0; i < numstates[numpos].blockindex; i++)
-        {
-          fall_instr fallen_block = getFallinstrByNum(numstates[numpos].num_to_draw, i);
-          if(this->scale <= 1){
-            drawShape(fallen_block.blocktype, 
-                      this->tetrisColors[fallen_block.color], 
-                      x + fallen_block.x_pos + numstates[numpos].x_shift, 
-                      y + fallen_block.y_stop - 1, 
-                      fallen_block.num_rot);
-          } else {
-            drawLargerShape(this->scale, 
-                            fallen_block.blocktype, 
-                            this->tetrisColors[fallen_block.color], 
-                            x + (fallen_block.x_pos * this->scale) + numstates[numpos].x_shift, 
-                            y + (fallen_block.y_stop * scaledYOffset) - scaledYOffset, 
-                            fallen_block.num_rot);
-          }
-        }
-      }
     }
-  }
   }
 
   if (displayColon)
@@ -1037,5 +992,7 @@ void TetrisMatrixDraw::resetNumStates(){
         this->numstates[i].fallindex = 0;
         this->numstates[i].blockindex = 0;
         this->numstates[i].x_shift = 0;
+
+        this->numstates[i].scale = this->numstates[i].blocktype = this->numstates[i].x_pos = this->numstates[i].y_pos = this->numstates[i].num_rot = 0;
     }
 }

@@ -39,6 +39,11 @@ typedef struct
   int blockindex;  // The index of the brick (as defined in the falling instructions) that is currently falling
   int fallindex;   // y-position of the brick it already has (incrementing with each step)
   int x_shift;     // x-position of the number relative to the matrix where the number should be placed.
+
+  // memory of previously drawn block
+  int scale; 
+  int blocktype; 
+  int x_pos; int y_pos; int num_rot;
 } numstate;
 
 class TetrisMatrixDraw
