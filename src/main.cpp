@@ -53,6 +53,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
+#define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
@@ -64,7 +65,11 @@ Serial.begin(115200);
 //Serial.setDebugOutput(true);
 
    tft = new Screen();
+   #ifdef rotate
+   tft->setRotation(3); 
+   #else
    tft->setRotation(1); 
+   #endif
    tft->fillScreen(ILI9486_BLACK);
    tft->drawText("Start",0,0);
    delay(1);
@@ -92,7 +97,11 @@ Serial.begin(115200);
    tft->drawText("got time",0,40);
    delay(2000);
    tft->fillScreen(ILI9486_BLACK);
-   tft->setRotation(3);
+   #ifdef rotate
+   tft->setRotation(1); 
+   #else
+   tft->setRotation(3); 
+   #endif
 
    //for (short i=0; i<3; i++)
    // tetristest(); 
@@ -208,7 +217,11 @@ void CheckTime() {
 }
 
 void InitArkonid() {
-    tft->setRotation(3);
+   #ifdef rotate
+   tft->setRotation(1); 
+   #else
+   tft->setRotation(3); 
+   #endif
     tft->fillScreen(ILI9486_BLACK);
     paddle->draw();
     ball->SetY(20);
@@ -225,7 +238,11 @@ void PlayArkonid() {
 }
 
 void InitTetris() {
-  tft->setRotation(1);
+   #ifdef rotate
+   tft->setRotation(3); 
+   #else
+   tft->setRotation(1); 
+   #endif
   tft->fillScreen(ILI9486_BLACK);
   char timeString [8];
   sprintf(timeString, "%d%d:%d%d", uhrzeit[0], uhrzeit[1], uhrzeit[2], uhrzeit[3]);

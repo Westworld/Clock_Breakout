@@ -466,14 +466,24 @@ void TetrisMatrixDraw::setTime(String time, bool forceRefresh)
 {
     this->sizeOfValue = 4;
     time.replace(":", "");
+    int16_t One_offset = 0;
     for (uint8_t pos = 0; pos < 4; pos++)
     {
-      int xOffset = pos * TETRIS_DISTANCE_BETWEEN_DIGITS * this->scale;
+      int xOffset = pos * TETRIS_DISTANCE_BETWEEN_DIGITS * this->scale - One_offset;
       if(pos >= 2){
         xOffset += (3 * this->scale);
       }
+
       String individualNumber = time.substring(pos, pos + 1);
       int number = (individualNumber != " ") ? individualNumber.toInt() : -1;
+
+
+      //if (pos == 0) {
+        if (number == 1) {
+            One_offset += (3 * this->scale);
+            xOffset -= (3 * this->scale);
+        }
+
       // Only change the number if its different or being forced
       if (forceRefresh || number != this->numstates[pos].num_to_draw)
       {
@@ -913,18 +923,18 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon, int co
         }
 
         thecolor =this->tetrisColors[current_fall.color];
-          
+        int16_t newx =   x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift;
         
             numstates[numpos].scale = this->scale;
             numstates[numpos].blocktype = current_fall.blocktype, 
-            numstates[numpos].x_pos =  x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift;
+            numstates[numpos].x_pos =  newx;
             numstates[numpos].y_pos =  y + (numstates[numpos].fallindex * scaledYOffset) - scaledYOffset;
             numstates[numpos].num_rot = rotations;
 
         drawLargerShape(this->scale, 
                           current_fall.blocktype, 
                           thecolor, 
-                          x + (current_fall.x_pos * this->scale) + numstates[numpos].x_shift, 
+                          newx, 
                           y + (numstates[numpos].fallindex * scaledYOffset) - scaledYOffset, 
                           rotations);
 
@@ -956,6 +966,12 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon, int co
 void TetrisMatrixDraw::drawColon(int x, int y, uint16_t colonColour){
   int colonSize = 2 * this->scale;
   int xColonPos = x + (TETRIS_DISTANCE_BETWEEN_DIGITS * 2 * this->scale) -10;  
+  if (numstates[0].num_to_draw == 1) {
+    xColonPos -= (3 * this->scale);
+  }
+  if (numstates[1].num_to_draw == 1) {
+    xColonPos -= (3 * this->scale);
+  }
   display->fillRect(xColonPos, y + (12 * this->scale), colonSize, colonSize, colonColour);
   display->fillRect(xColonPos, y + (8 * this->scale), colonSize, colonSize, colonColour);
 }
