@@ -869,10 +869,10 @@ bool TetrisMatrixDraw::drawNumbers(int x, int yFinish, bool displayColon, int co
   int scaledYOffset = (this->scale > 1) ? this->scale : 1;
   int y = yFinish - (TETRIS_Y_DROP_DEFAULT * this->scale);
 
-  if (numstates[0].num_to_draw == 1)  x += (3 * this->scale);
-  if (numstates[1].num_to_draw == 1)  x += (3 * this->scale);
-  if (numstates[2].num_to_draw == 1)  x += (3 * this->scale);
-  if (numstates[3].num_to_draw == 1)  x += (3 * this->scale);    
+  if (numstates[0].num_to_draw == 1)  x += (2 * this->scale);
+  if (numstates[1].num_to_draw == 1)  x += (2 * this->scale);
+  if (numstates[2].num_to_draw == 1)  x += (2 * this->scale);
+  if (numstates[3].num_to_draw == 1)  x += (2 * this->scale);    
 
   for (int numpos = 0; numpos < this->sizeOfValue; numpos++)
   {
