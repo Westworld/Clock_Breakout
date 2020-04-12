@@ -53,7 +53,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-// #define rotate 1
+#define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
@@ -103,8 +103,7 @@ Serial.begin(115200);
    tft->setRotation(3); 
    #endif
 
-   //for (short i=0; i<3; i++)
-   // tetristest(); 
+
    
    ball = new Ball(tft);
    ball->setAngle(37);
@@ -114,8 +113,11 @@ Serial.begin(115200);
    paddle = new Paddle(tft);
    blocks = new Blocks(tft);
    
+
+      //for (short i=0; i<3; i++)
+   tetristest(); 
+
    CheckTime();
-   
 }
 
 
@@ -200,10 +202,10 @@ void CheckTime() {
   
       GameType = newgame;
        switch (GameType) {
-        case 0: 
+        case Arkonoid: 
           InitArkonid();
           break;
-        case 1: 
+        case Tetris: 
           InitTetris();
           break;
         default:
@@ -222,6 +224,12 @@ void InitArkonid() {
    #else
    tft->setRotation(3); 
    #endif
+  #ifdef TARGET_8266
+   SetGame(Arkonoid, 4);
+   #else
+   SetGame(Arkonoid, 2);
+   #endif
+
     tft->fillScreen(ILI9486_BLACK);
     paddle->draw();
     ball->SetY(20);
@@ -273,10 +281,10 @@ void loop() {
   }
 
   switch (GameType) {
-     case 0: 
+     case Arkonoid: 
       PlayArkonid();
       break;
-    case 1: 
+    case Tetris: 
       PlayTetris();
       break;    
     default:
@@ -292,39 +300,51 @@ void loop() {
 void tetristest() {
   tft->setRotation(1);
   tft->fillScreen(ILI9486_BLACK);
- 
-  /*tft->Tetris_setText("HELLO",false);
-  tft->Tetris_drawText(60, 250, -1);
-  
-  while(!(tft->Tetris_drawText(60, 250, -1))) {
-    delay(20);
-    tft->Tetris_drawText(60, 250, ILI9486_BLACK);
+
+    #ifdef TARGET_8266
+   SetGame(Space_Invader, 4);
+   #else
+   SetGame(Space_Invader, 2);
+   #endif
+
+   GetTime();
+
+   paddle->draw();
+    ball->SetY(20);
+    blocks->Setup(uhrzeit);
+
+  int16_t move_x = 0, move_y = 0;
+  int16_t domovex = -5, domovey = 0;
+
+  int16_t loopcounter = 0, loopx = 0, blockcounter = 0;
+  int16_t maxxloop = 32 * numberblocks * 10;  // 24000
+  while (loopcounter < maxxloop) {
+    if (blockcounter <=numberblocks) {
+      blocks->draw(move_x, move_y, blockcounter++, domovex, domovey);
+    }
+    else {
+        blockcounter = 0;
+        move_x += domovex;
+        if (domovey != 0) {
+          move_y -= 15;
+          domovey = 0;
+        } 
+
+      if (++loopx >=32 ) {
+          loopx = 0;
+          domovey = -15;
+          domovex = -domovex;
+      }  
+    }
+
+    loopcounter++;
+    yield();
+    delay(2);
   }
-  */
 
-  int16_t cur_hour;
-  int16_t cur_min;
-  int16_t cur_sec;
-  GetTime( cur_hour,cur_min, cur_sec);
+  // paddle fährt und schießt. Ein Schuß ist senkrechter strich, solange schuß läuft nicht erneut schießen
+  // schuß stoppt wenn ganz oben oder treffer auf block
+  // kann man "ball" für schuß nutzen?
 
-    uhrzeit[0] = cur_hour / 10;
-    uhrzeit[1] = cur_hour % 10;
-    uhrzeit[2] = cur_min / 10;
-    uhrzeit[3] = cur_min % 10;
-  //long nummer = (uhrzeit[0] *1000) + (uhrzeit[1]*100 ) + (uhrzeit[2]*10 ) + (uhrzeit[3] );
-  //tft->Tetris_setNumbers(nummer);
-  
-  char timeString [8];
-  sprintf(timeString, "%d%d:%d%d", uhrzeit[0], uhrzeit[1], uhrzeit[2], uhrzeit[3]);
-  tft->Tetris_setTime(timeString);
-  
-  bool displaycolon = false;
-  while(!(tft->Tetris_drawNumbers(60,250, displaycolon, -1))) {
-    delay(20);
-    GetTime( cur_hour,cur_min, cur_sec);
-    displaycolon = ((cur_sec % 2) == 1);
-
-    tft->Tetris_drawNumbers(60,250, displaycolon, ILI9486_BLACK);
-  }
-     delay(5000);
+  delay(5000);
 }

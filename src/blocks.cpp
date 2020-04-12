@@ -3,6 +3,8 @@
 #include <Console.h>
 #include <digits.h>
 
+extern int16_t blockwidth, blockheight, blockstartx, blockstarty, blockoffset;
+
 Blocks::Blocks(Screen * mastertft)
 {
     tft = mastertft;
@@ -104,7 +106,15 @@ int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
                 }
             }
     }
-  
+}
+
+void Blocks::draw(int16_t old_x, int16_t old_y, int16_t loop, int16_t move_x, int16_t move_y)
+{
+   int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
+   if (loop >= maxelements) return;
+
+   allblocks[loop]->undraw(tft, old_x, old_y);
+   allblocks[loop]->draw(tft, old_x+move_x, old_y+move_y);
 }
 
 void Blocks::draw(Ball * ball)  // only draw blocks close to the ball position

@@ -1,7 +1,13 @@
 #include "Block.h"
-
-
 #include <Console.h>
+
+
+// cannot use #define, as size depending of game type
+int16_t blockwidth = 23;
+int16_t blockheight = 20;
+int16_t blockstartx = 430;
+int16_t blockstarty = 420;
+int16_t blockoffset = 10;
 
 
 Block::Block(void)
@@ -42,6 +48,21 @@ void Block::draw(Screen * tft)
     } 
 }
 
+void Block::draw(Screen * tft, int16_t move_x, int16_t move_y)
+{
+    if (used) {
+        if (active)
+            tft->fillRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, color);
+        else
+        {
+            //tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_YELLOW2);
+            tft->drawRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, color);
+            tft->drawRect(pos_x+1+move_x, pos_y+1+move_y, blockwidth-2, blockheight-2, color);
+        }
+            
+    } 
+}
+
 void Block::draw(Screen * tft, Ballsize ballsize)
 {
     if (used) {
@@ -65,6 +86,13 @@ void Block::undraw(Screen * tft)
 {
     if (used) {
         tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_BLACK);  
+    } 
+}
+
+void Block::undraw(Screen * tft, int16_t move_x, int16_t move_y)
+{
+    if (used) {
+        tft->fillRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, ILI9486_BLACK);  
     } 
 }
 
@@ -140,3 +168,40 @@ int16_t Block::check(int16_t posx, int16_t posy, int16_t movex, int16_t movey, S
     return false;
 }
 
+
+void SetGame(int16_t gameType, int16_t screenSize) {
+if (gameType == Arkonoid) {
+    if (screenSize == 4) {
+        blockwidth = 23;
+         blockheight = 20;
+         blockstartx = 430;
+         blockstarty = 420;
+         blockoffset = 10;
+    }
+    else {  // 2.4 Inch
+        blockwidth = 12;
+        blockheight = 14;
+        blockstartx = 280;
+        blockstarty = 400;
+        blockoffset = 10;
+    }
+
+}
+else {  // Space Invader
+    if (screenSize == 4) {
+         blockwidth = 13;
+         blockheight = 12;
+         blockstartx = 460;
+         blockstarty = 520;
+         blockoffset = 5;
+    }
+    else {  // 2.4 Inch
+        blockwidth = 12;
+        blockheight = 14;
+        blockstartx = 280;
+        blockstarty = 400;
+        blockoffset = 10;
+    }
+}
+
+}

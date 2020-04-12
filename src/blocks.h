@@ -28,6 +28,7 @@ public:
     void Setup(byte digit[4]);
     //void update(float ballpos);
     void draw(void);
+    void draw(int16_t old_x, int16_t old_y, int16_t loop, int16_t move_x, int16_t move_y);
     void draw(Ball * ball);
     void checkBall(Ball * ball);
     //void checkBall(Ball * ball);  ballsize

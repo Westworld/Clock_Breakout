@@ -4,8 +4,9 @@
 #include "screen.h"
 #include "ball.h"
 
+/*
  #ifdef TARGET_8266
-#define blockwidth 23
+//#define blockwidth 23
 #define blockheight 20
 #define blockstartx 430
 #define blockstarty 420
@@ -19,6 +20,10 @@
 #define blockstarty 400
 #define blockoffset 10
 #endif
+*/
+
+enum { Arkonoid, Tetris, Space_Invader };
+
 
 
 class Block
@@ -37,9 +42,13 @@ public:
     //void update(float ballpos);;
     void draw(Screen * mastertft);
     void draw(Screen * mastertft, Ballsize ballsize);
+    void draw(Screen * mastertft, int16_t move_x, int16_t move_y);
     void undraw(Screen * mastertft);
+    void undraw(Screen * mastertft, int16_t move_x, int16_t move_y);
     int16_t check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y, Screen * mastertft);
     bool check(Ballsize ballsize, Ball * ball, Screen * tft);
 };
+
+void SetGame(int16_t gameType, int16_t screenSize);
 
 #endif // BLOCK_HPP_
