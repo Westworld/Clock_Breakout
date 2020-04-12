@@ -26,6 +26,8 @@ public:
     Paddle(Screen * mastertft);
     void update(float ballpos);
     void draw(void);
+    int16_t getX(void);
+    void setX(int16_t x);
 };
 
 #endif // PADDLE_HPP_

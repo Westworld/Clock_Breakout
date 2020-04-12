@@ -160,3 +160,25 @@ void Blocks::checkBall(Ball * ball)
         }
     }    
 }
+
+
+void Blocks::findNearestBlock(int16_t &x, int16_t &y, int16_t paddle_x) {   
+    int16_t x = 0, y = 10000, blockx, blocky;
+
+    // find lowestBlock above paddle
+
+    for (int16_t i=0; i<numberblocks; i++) {
+        if ((allblocks[i]->used) && (allblocks[i]->active)) {
+            if(allblocks[i]->isNearestBlock(paddle_x, blockx, blocky)) {
+                if (blocky < y) {
+                    y = blocky;
+                    x = blockx;
+                    return;
+                }
+            }
+
+
+        }
+    }    
+
+}

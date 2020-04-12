@@ -18,6 +18,7 @@
 #include "ball.h"
 #include "paddle.h"
 #include "blocks.h"
+#include "shot.h"
 //#include "ntp_time.h"
 
 #include <Console.h>
@@ -32,6 +33,9 @@ Screen * tft;
 Ball * ball;
 Paddle * paddle;
 Blocks * blocks;
+
+Shot * shotup;
+Shot * shotdown;
 
 short GameType = -1;  // 0 = Arkonid, 1 = Tetris
 
@@ -102,17 +106,16 @@ Serial.begin(115200);
    #else
    tft->setRotation(3); 
    #endif
-
-
    
    ball = new Ball(tft);
    ball->setAngle(37);
    // winkel setzen, nicht 45°
-   // nicht komplett löschen und neu zeichnen, nur untere pixel?
 
    paddle = new Paddle(tft);
    blocks = new Blocks(tft);
    
+   shotup = new Shot(tft, 8);
+   shotdown = new Shot(tft, -8);
 
       //for (short i=0; i<3; i++)
    tetristest(); 
@@ -310,8 +313,10 @@ void tetristest() {
    GetTime();
 
    paddle->draw();
-    ball->SetY(20);
-    blocks->Setup(uhrzeit);
+   blocks->Setup(uhrzeit);
+   shotup->deactivate();
+   shotdown->deactivate();
+
 
   int16_t move_x = 0, move_y = 0;
   int16_t domovex = -5, domovey = 0;
@@ -338,13 +343,28 @@ void tetristest() {
     }
 
     loopcounter++;
+
+    if (!shotup->move_draw()) {
+        shotup->activate(paddle->getX(), 12);
+      // new shot up, set x depending of paddle, which sets ative again
+
+      // check hit on block ####################
+    }
+
+    if (!shotdown-> move_draw()) {
+        int16_t x, y;
+        blocks->findNearestBlock(x, y, paddle->getX());
+        if (x != 0)
+          shotdown->activate(x, y);
+    }
+
+    // move paddle to follow lowest block, avoid shotdown
+
     yield();
     delay(2);
   }
 
-  // paddle fährt und schießt. Ein Schuß ist senkrechter strich, solange schuß läuft nicht erneut schießen
   // schuß stoppt wenn ganz oben oder treffer auf block
-  // kann man "ball" für schuß nutzen?
 
   delay(5000);
 }

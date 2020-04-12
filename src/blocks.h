@@ -33,6 +33,7 @@ public:
     void checkBall(Ball * ball);
     //void checkBall(Ball * ball);  ballsize
     void drawBlock(int16_t curBlock);
+    void findNearestBlock(int16_t &x, int16_t &y, int16_t paddle_x);
 
 };
 

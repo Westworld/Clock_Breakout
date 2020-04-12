@@ -9,6 +9,15 @@ Paddle::Paddle(Screen * mastertft)
     max_y = tft->getheight();
 }
 
+
+int16_t Paddle::getX(void) {
+    return pos_x;
+}
+
+void Paddle::setX(int16_t x) {
+    pos_x = x;
+}
+
 void Paddle::draw(void)
 {
     int16_t x = pos_x - (paddlewidth/2);
