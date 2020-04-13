@@ -344,19 +344,26 @@ void tetristest() {
 
     loopcounter++;
 
-    if (!shotup->move_draw()) {
-        shotup->activate(paddle->getX(), 12);
-      // new shot up, set x depending of paddle, which sets ative again
+    if ((loopcounter % 15) == 1 ) {
+      if (!shotup->move_draw()) {
+          shotup->activate(paddle->getX(), 12);
+        // new shot up, set x depending of paddle, which sets ative again      
+      }
 
-      // check hit on block ####################
+
+      /* if (!shotdown-> move_draw()) {  // untested
+          int16_t x, y;
+          blocks->findNearestBlock(x, y, paddle->getX());
+          if (x != 0)
+            shotdown->activate(x, y);
+      } */
     }
 
-    if (!shotdown-> move_draw()) {
-        int16_t x, y;
-        blocks->findNearestBlock(x, y, paddle->getX());
-        if (x != 0)
-          shotdown->activate(x, y);
-    }
+
+    if (blocks->checkShot(shotup->getX(), shotup->getY(true))) 
+      {  // check hit on block ####################
+            shotup->deactivate();
+      }
 
     // move paddle to follow lowest block, avoid shotdown
 

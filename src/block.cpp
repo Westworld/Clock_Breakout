@@ -51,8 +51,11 @@ void Block::draw(Screen * tft)
 void Block::draw(Screen * tft, int16_t move_x, int16_t move_y)
 {
     if (used) {
-        if (active)
+        if (active) {
             tft->fillRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, color);
+            last_pos_x=pos_x+move_x; 
+            last_pos_y=pos_y+move_y;
+        }    
         else
         {
             //tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_YELLOW2);
@@ -165,6 +168,44 @@ int16_t Block::check(int16_t posx, int16_t posy, int16_t movex, int16_t movey, S
             }       
     }
 
+    return false;
+}
+
+
+
+bool Block::check(int16_t posx, int16_t posy, Screen * tft)
+{
+    int16_t result=false;
+
+    if (used && active) {
+
+        //Console::info("Shotup,%d,%d,%d,%d,%d,%d", posx, posy, last_pos_x, last_pos_x+blockwidth,
+        //         last_pos_y,  last_pos_y+blockheight); 
+      
+        if ( (posx >= (last_pos_x)) && (posx <= last_pos_x+blockwidth) ) {
+           
+            if ( (posy <= (last_pos_y+blockheight)) && (posy >= last_pos_y) )
+            {
+
+                active=false;
+                draw(tft, last_pos_x-pos_x, last_pos_y-pos_y);  // malen nur mit Versatz, woher Versatz erfahren?
+                return true;           
+            }       
+        }
+    }
+    return false;
+}
+
+
+bool Block::isNearestBlock(int16_t paddle_x, int16_t &blockx, int16_t &blocky) {
+    if (used && active) {
+        if ( (paddle_x <= (pos_x+blockwidth+5)) && (paddle_x >= (pos_x-5)) )
+            {
+                blockx = pos_x + (blockwidth/2);
+                blocky = pos_y + blockheight;
+                return true;
+            }
+    }
     return false;
 }
 

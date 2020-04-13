@@ -161,9 +161,23 @@ void Blocks::checkBall(Ball * ball)
     }    
 }
 
+bool Blocks::checkShot(int16_t x, int16_t y) {
+    bool result;
+    for (int16_t i=0; i<numberblocks; i++) {
+        if (allblocks[i]->used && allblocks[i]->active) {
+            result = allblocks[i]->check(x, y, tft);
+            if (result)
+            {   
+                return true; 
+            }            
+        }
+    }  
+    return false;    
+}
 
 void Blocks::findNearestBlock(int16_t &x, int16_t &y, int16_t paddle_x) {   
-    int16_t x = 0, y = 10000, blockx, blocky;
+    int16_t blockx, blocky;
+    x = 0; y = 10000;
 
     // find lowestBlock above paddle
 

@@ -18,9 +18,6 @@ private:
     Block* allblocks[numberblocks];
     Screen * tft;
 
-
-
-
 public:
     Blocks(Screen * mastertft);
     void Setup(void);
@@ -31,7 +28,7 @@ public:
     void draw(int16_t old_x, int16_t old_y, int16_t loop, int16_t move_x, int16_t move_y);
     void draw(Ball * ball);
     void checkBall(Ball * ball);
-    //void checkBall(Ball * ball);  ballsize
+    bool checkShot(int16_t x, int16_t y);  
     void drawBlock(int16_t curBlock);
     void findNearestBlock(int16_t &x, int16_t &y, int16_t paddle_x);
 

@@ -1,12 +1,12 @@
 #include "Shot.h"
 #include "Console.h"
 
-Shot::Shot(Screen * mastertft, int16_t movex)
+Shot::Shot(Screen * mastertft, int16_t movey)
 {
     tft = mastertft;
     pos_x = tft->getwidth() / 2;
     pos_y = 1;   
-    move_y = movex;
+    move_y = movey;
     max_x = tft->getwidth();
     max_y = tft->getheight();
 }
@@ -20,6 +20,18 @@ Shotsize Shot::GetSize(void) {
     thesize.movey = move_y;
 
     return thesize;
+}
+
+int16_t Shot::getX(void) {
+    return pos_x;
+}
+
+int16_t Shot::getY(bool up) {
+    if (up)
+        return pos_y+shotheight;
+    else
+        return pos_y;
+    
 }
 
 void Shot::activate(int16_t posx, int16_t posy) {
@@ -46,16 +58,16 @@ void Shot::undraw(void){
 
 int16_t Shot::move_draw(void) {
     if (active) {
-    this->undraw();
-    pos_y = pos_y + move_y;
-    if ((pos_y < 1) || (pos_y > max_x))
-        active = false;
-
-    this->draw();  
+        this->undraw();
+        pos_y = pos_y + move_y;
+        if ((pos_y < 1) || (pos_y > max_x))
+            active = false;
+        this->draw();  
     }
     return active; //blockid; 
 }
 
 void Shot::deactivate(void) {
     active = false;
+    undraw();
 }

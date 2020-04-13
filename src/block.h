@@ -30,6 +30,7 @@ class Block
 {
 private:
     int16_t pos_x, pos_y;
+    int16_t last_pos_x=0, last_pos_y=0;
     uint16_t color = ILI9486_YELLOW;
 
 public:
@@ -46,7 +47,9 @@ public:
     void undraw(Screen * mastertft);
     void undraw(Screen * mastertft, int16_t move_x, int16_t move_y);
     int16_t check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y, Screen * mastertft);
+    bool check(int16_t posx, int16_t posy, Screen * tft);
     bool check(Ballsize ballsize, Ball * ball, Screen * tft);
+    bool isNearestBlock(int16_t paddle_x, int16_t &blockx, int16_t &blocky);
 };
 
 void SetGame(int16_t gameType, int16_t screenSize);

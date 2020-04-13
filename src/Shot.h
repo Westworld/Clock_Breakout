@@ -3,7 +3,7 @@
 
 #include "screen.h"
 
-#define shotwidth 2
+#define shotwidth 3
 #define shotheight 8
 #define shotspeed 1
 
@@ -34,6 +34,8 @@ public:
     Shotsize GetSize(void);
     void activate(int16_t posx, int16_t posy);
     void deactivate(void);
+    int16_t getX(void);
+    int16_t getY(bool up);
 
 };
 
