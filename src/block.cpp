@@ -66,6 +66,24 @@ void Block::draw(Screen * tft, int16_t move_x, int16_t move_y)
     } 
 }
 
+void Block::draw(Screen * tft, int16_t move_x, int16_t move_y, int16_t othercolor)
+{
+    if (used) {
+        if (active) {
+            tft->fillRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, othercolor);
+            last_pos_x=pos_x+move_x; 
+            last_pos_y=pos_y+move_y;
+        }    
+        else
+        {
+            //tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_YELLOW2);
+            tft->drawRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, othercolor);
+            tft->drawRect(pos_x+1+move_x, pos_y+1+move_y, blockwidth-2, blockheight-2, othercolor);
+        }
+            
+    } 
+}
+
 void Block::draw(Screen * tft, Ballsize ballsize)
 {
     if (used) {
@@ -187,8 +205,8 @@ bool Block::check(int16_t posx, int16_t posy, Screen * tft)
             if ( (posy <= (last_pos_y+blockheight)) && (posy >= last_pos_y) )
             {
 
+                draw(tft, last_pos_x-pos_x, last_pos_y-pos_y, TFT_RED);  // malen nur mit Versatz, woher Versatz erfahren?
                 active=false;
-                draw(tft, last_pos_x-pos_x, last_pos_y-pos_y);  // malen nur mit Versatz, woher Versatz erfahren?
                 return true;           
             }       
         }
@@ -199,10 +217,10 @@ bool Block::check(int16_t posx, int16_t posy, Screen * tft)
 
 bool Block::isNearestBlock(int16_t paddle_x, int16_t &blockx, int16_t &blocky) {
     if (used && active) {
-        if ( (paddle_x <= (pos_x+blockwidth+5)) && (paddle_x >= (pos_x-5)) )
+        if ( (paddle_x <= (last_pos_x+blockwidth+5)) && (paddle_x >= (last_pos_x-5)) )
             {
-                blockx = pos_x + (blockwidth/2);
-                blocky = pos_y + blockheight;
+                blockx = last_pos_x + (blockwidth/2);
+                blocky = last_pos_y + blockheight;
                 return true;
             }
     }

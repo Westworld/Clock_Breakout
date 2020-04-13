@@ -44,12 +44,14 @@ public:
     void draw(Screen * mastertft);
     void draw(Screen * mastertft, Ballsize ballsize);
     void draw(Screen * mastertft, int16_t move_x, int16_t move_y);
+    void draw(Screen * tft, int16_t move_x, int16_t move_y, int16_t othercolor);
     void undraw(Screen * mastertft);
     void undraw(Screen * mastertft, int16_t move_x, int16_t move_y);
     int16_t check(int16_t posx, int16_t pos_y, int16_t move_x, int16_t move_y, Screen * mastertft);
     bool check(int16_t posx, int16_t posy, Screen * tft);
     bool check(Ballsize ballsize, Ball * ball, Screen * tft);
     bool isNearestBlock(int16_t paddle_x, int16_t &blockx, int16_t &blocky);
+    
 };
 
 void SetGame(int16_t gameType, int16_t screenSize);

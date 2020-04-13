@@ -351,12 +351,12 @@ void tetristest() {
       }
 
 
-      /* if (!shotdown-> move_draw()) {  // untested
+      if (!shotdown->move_draw()) {  // untested
           int16_t x, y;
           blocks->findNearestBlock(x, y, paddle->getX());
           if (x != 0)
             shotdown->activate(x, y);
-      } */
+      } 
     }
 
 
