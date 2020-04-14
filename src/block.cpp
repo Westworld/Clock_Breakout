@@ -220,7 +220,7 @@ bool Block::isNearestBlock(int16_t paddle_x, int16_t &blockx, int16_t &blocky) {
         if ( (paddle_x <= (last_pos_x+blockwidth+5)) && (paddle_x >= (last_pos_x-5)) )
             {
                 blockx = last_pos_x + (blockwidth/2);
-                blocky = last_pos_y + blockheight;
+                blocky = last_pos_y;// + blockheight;
                 return true;
             }
     }

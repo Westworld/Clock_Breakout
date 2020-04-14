@@ -18,6 +18,17 @@ void Paddle::setX(int16_t x) {
     pos_x = x;
 }
 
+void Paddle::undraw(void)
+{
+    int16_t x = pos_x - (paddlewidth/2);
+    if (x<0)
+        x=0;
+    else if (x+paddlewidth > max_x)
+            x = max_x-paddlewidth;
+
+    tft->fillRect(x, pos_y, paddlewidth, paddleheight, ILI9486_BLACK);
+}
+
 void Paddle::draw(void)
 {
     int16_t x = pos_x - (paddlewidth/2);

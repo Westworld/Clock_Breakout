@@ -32,7 +32,7 @@ public:
     void undraw(void);
     int16_t move_draw(void);
     Shotsize GetSize(void);
-    void activate(int16_t posx, int16_t posy);
+    void activate(int16_t posx, int16_t posy, bool down);
     void deactivate(void);
     int16_t getX(void);
     int16_t getY(bool up);

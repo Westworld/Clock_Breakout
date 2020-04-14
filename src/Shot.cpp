@@ -34,9 +34,10 @@ int16_t Shot::getY(bool up) {
     
 }
 
-void Shot::activate(int16_t posx, int16_t posy) {
+void Shot::activate(int16_t posx, int16_t posy, bool down) {
     pos_x = posx;
     pos_y = posy;
+    if (down) pos_y -= shotheight;
     active = true;
 }
 
