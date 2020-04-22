@@ -43,11 +43,11 @@ void Shot::activate(int16_t posx, int16_t posy, bool down) {
     pos_y = posy;
     if (down) {
         pos_y -= shotheight;
-        color = ILI9486_YELLOW;
+        color = ILI9486_WHITE;
     }
     else
     {
-            color = ILI9486_WHITE;
+            color = ILI9486_YELLOW;
     }
         
     active = true;
