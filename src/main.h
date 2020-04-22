@@ -7,3 +7,5 @@ void PlayArkonid();
 void InitArkonid();
 void PlayTetris();
 void InitTetris();
+void InitInvaders();
+void PlayInvaders();

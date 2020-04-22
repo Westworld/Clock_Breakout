@@ -16,6 +16,11 @@ Block::Block(void)
     active=false;
 }
 
+void Block::setColor(int16_t othercolor)
+{
+    color = othercolor;
+}
+
 void Block::activate(int16_t posx, int16_t posy) 
 {
     used = true;
@@ -225,6 +230,15 @@ bool Block::isNearestBlock(int16_t paddle_x, int16_t &blockx, int16_t &blocky) {
             }
     }
     return false;
+}
+
+int16_t Block::isNearestBlock(int16_t paddle_x) {
+    if (used && active) {
+        if  (paddle_x < last_pos_x)  return 1;
+        if  (paddle_x > (last_pos_x + blockwidth))  return -1;
+        return 0;
+    }
+    return 0;
 }
 
 

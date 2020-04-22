@@ -51,7 +51,8 @@ public:
     bool check(int16_t posx, int16_t posy, Screen * tft);
     bool check(Ballsize ballsize, Ball * ball, Screen * tft);
     bool isNearestBlock(int16_t paddle_x, int16_t &blockx, int16_t &blocky);
-    
+    int16_t isNearestBlock(int16_t paddle_x);
+    void setColor(int16_t othercolor);
 };
 
 void SetGame(int16_t gameType, int16_t screenSize);

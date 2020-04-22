@@ -57,11 +57,18 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-#define rotate 1
+// #define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
 bool forceRefresh = true;
+
+
+// Invaders
+  int16_t invaders_move_x, invaders_move_y;
+  int16_t invaders_domovex, invaders_domovey;
+  int16_t invaders_loopx, invaders_blockcounter;
+  int32_t invaders_maxxloop, invaders_loopcounter;
 
 
 void setup() {
@@ -118,7 +125,7 @@ Serial.begin(115200);
    shotdown = new Shot(tft, -8);
 
       //for (short i=0; i<3; i++)
-   tetristest(); 
+   //tetristest(); 
 
    CheckTime();
 }
@@ -201,7 +208,7 @@ void CheckTime() {
 
   if ((cur_hour != last_hour) || (cur_min != last_min)) {
 
-    int16_t newgame = uhrzeit[2] % 2;  // 1
+    int16_t newgame = uhrzeit[2] % 3;  // 1
   
       GameType = newgame;
        switch (GameType) {
@@ -211,6 +218,9 @@ void CheckTime() {
         case Tetris: 
           InitTetris();
           break;
+        case Space_Invader: 
+          InitInvaders();
+          break;         
         default:
           // nothing 
           ;
@@ -234,6 +244,7 @@ void InitArkonid() {
    #endif
 
     tft->fillScreen(ILI9486_BLACK);
+    blocks->setColor(ILI9486_YELLOW);
     paddle->draw();
     ball->SetY(20);
     blocks->Setup(uhrzeit);
@@ -276,6 +287,107 @@ void PlayTetris() {
   tft->Tetris_drawNumbers(40,250, displaycolon, -1);
 }
 
+
+void InitInvaders() {
+  #ifdef rotate
+   tft->setRotation(1); 
+   #else
+   tft->setRotation(3); 
+   #endif
+
+  tft->fillScreen(ILI9486_BLACK);
+
+    #ifdef TARGET_8266
+   SetGame(Space_Invader, 4);
+   #else
+   SetGame(Space_Invader, 2);
+   #endif
+
+   GetTime();
+   blocks->setColor(ILI9486_WHITE);
+   paddle->setX(tft->getwidth()/2);
+   paddle->draw();
+   blocks->Setup(uhrzeit);
+   shotup->deactivate();
+   shotdown->deactivate();
+
+
+  invaders_move_x = 0, invaders_move_y = 0;
+  invaders_domovex = -5, invaders_domovey = 0;
+
+  invaders_loopcounter = 0, invaders_loopx = 0, invaders_blockcounter = 0;
+  invaders_maxxloop = 32 * numberblocks * 15;  // 24000
+}
+
+void PlayInvaders() {
+
+if (invaders_loopcounter < invaders_maxxloop) {
+    if (invaders_blockcounter <=numberblocks) {
+      blocks->draw(invaders_move_x, invaders_move_y, invaders_blockcounter++, invaders_domovex, invaders_domovey);
+    }
+    else {
+        invaders_blockcounter = 0;
+        invaders_move_x += invaders_domovex;
+        if (invaders_domovey != 0) {
+          invaders_move_y -= 15;
+          invaders_domovey = 0;
+        } 
+
+      if (++invaders_loopx >=32 ) {
+          invaders_loopx = 0;
+          invaders_domovey = -15;
+          invaders_domovex = -invaders_domovex;
+      }  
+    }
+
+    invaders_loopcounter++;
+
+    if ((invaders_loopcounter % 15) == 1 ) {
+      if (!shotup->move_draw()) {
+          shotup->activate(paddle->getX(), 12, false);
+        // new shot up, set x depending of paddle, which sets ative again      
+      }
+
+
+      if (!shotdown->move_draw()) {  // untested
+          int16_t x, y;
+          blocks->findNearestBlock(x, y, paddle->getX());
+          if (x != 0)
+            shotdown->activate(x, y, true);
+      } 
+
+          // move paddle to follow lowest block, avoid shotdown
+          // first check if shot is coming down, if yes move left/right (opposite of shot)
+      int16_t x, paddlex;    
+      x=shotdown->getX();
+      paddlex = paddle->getX();
+      if (x >= (paddlex-1) || (x <= paddlex+1))  {
+        paddle->undraw();
+        if (x>paddlex) 
+          paddle->setX(paddlex-1);
+        else
+          paddle->setX(paddlex+1);
+          paddle->draw();  
+      }
+      else {
+        // no risk being hit, but do we have a block above us or do we need to move?
+        paddlex = paddle->getX();
+        x = blocks->findNearestBlock(paddlex);
+        paddle->setX(paddlex+x);
+      }
+    }
+
+    if (blocks->checkShot(shotup->getX(), shotup->getY(true))) 
+      {  // check hit on block ####################
+            shotup->deactivate();
+      }
+
+    yield();
+    //delay(2);
+  }
+}
+
+
 void loop() {
 
   if (++loopcounter>30) {
@@ -286,22 +398,30 @@ void loop() {
   switch (GameType) {
      case Arkonoid: 
       PlayArkonid();
+      delay(5);
       break;
     case Tetris: 
       PlayTetris();
+      delay(5);
       break;    
+    case Space_Invader: 
+      PlayInvaders();
+      delay(2);
+      break; 
     default:
       // nothing 
       ;
   }   
-
-  delay(5);
   yield();
 }
 
 
 void tetristest() {
-  tft->setRotation(1);
+   #ifdef rotate
+   tft->setRotation(1); 
+   #else
+   tft->setRotation(3); 
+   #endif
   tft->fillScreen(ILI9486_BLACK);
 
     #ifdef TARGET_8266
@@ -363,13 +483,19 @@ void tetristest() {
       int16_t x, paddlex;    
       x=shotdown->getX();
       paddlex = paddle->getX();
-      if (x >= (paddlex-10) || (x <= paddlex+10))  {
+      if (x >= (paddlex-1) || (x <= paddlex+1))  {
         paddle->undraw();
         if (x>paddlex) 
           paddle->setX(paddlex-1);
         else
           paddle->setX(paddlex+1);
-        paddle->draw();  
+          paddle->draw();  
+      }
+      else {
+        // no risk being hit, but do we have a block above us or do we need to move?
+        paddlex = paddle->getX();
+        x = blocks->findNearestBlock(paddlex);
+        paddle->setX(paddlex+x);
       }
     }
 

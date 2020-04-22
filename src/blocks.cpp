@@ -93,6 +93,21 @@ void Blocks::Setup(byte digit[4])
     }
 }
 
+void Blocks::setColor(int16_t thecolor)
+{
+int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
+   int16_t curelement;
+
+   for (int16_t i=0;i<blocksx;i++) {
+        for (int16_t j=0; j<blocksy; j++) {
+            curelement = (i*blocksy)+(j);
+            if (curelement < maxelements) {
+                allblocks[curelement]->setColor(thecolor);
+                }
+            }
+    }
+}
+
 void Blocks::draw()
 {
 int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
@@ -190,9 +205,19 @@ void Blocks::findNearestBlock(int16_t &x, int16_t &y, int16_t paddle_x) {
                     return;
                 }
             }
-
-
         }
     }    
+}
 
+int16_t Blocks::findNearestBlock(int16_t paddle_x) {   
+    int16_t blockx, blocky, x = 0;
+
+    // find nearest block above paddle
+
+    for (int16_t i=0; i<numberblocks; i++) {
+        if ((allblocks[i]->used) && (allblocks[i]->active)) {
+            x += allblocks[i]->isNearestBlock(paddle_x);
+        }
+    }    
+    return x;
 }
