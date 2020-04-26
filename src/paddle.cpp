@@ -9,6 +9,18 @@ Paddle::Paddle(Screen * mastertft)
     max_y = tft->getheight();
 }
 
+void Paddle::setType(bool gametyp)
+{
+    justLine = gametyp;
+    if (gametyp) {
+        paddleheight = 4;
+    }
+    else
+    {
+        paddleheight = 8;    
+    }
+    
+}
 
 int16_t Paddle::getX(void) {
     return pos_x;
@@ -26,7 +38,11 @@ void Paddle::undraw(void)
     else if (x+paddlewidth > max_x)
             x = max_x-paddlewidth;
 
-    tft->fillRect(x, pos_y, paddlewidth, paddleheight, ILI9486_BLACK);
+    if (justLine)
+        tft->fillRect(x, pos_y, paddlewidth, paddleheight, ILI9486_BLACK);
+    else {
+        tft->fillRect(x, pos_y, paddlewidth, paddleheight, ILI9486_BLACK);
+    }    
 }
 
 void Paddle::draw(void)
@@ -37,10 +53,40 @@ void Paddle::draw(void)
     else if (x+paddlewidth > max_x)
             x = max_x-paddlewidth;
 
-    tft->fillRect(x, pos_y, paddlewidth, paddleheight, color);
+    if (justLine)
+        tft->fillRect(x, pos_y, paddlewidth, paddleheight, color);
+    else {
+        tft->fillRect(x, pos_y, paddlewidth, paddleheight, color);
+    }    
 }
 
-void Paddle::update(float ballpos)
+void Paddle::move(int16_t movex)  // only for block
+{
+
+    if (movex == 0) return;
+
+    int16_t x = pos_x - (paddlewidth/2);
+
+    if (x<0)
+        x=0;
+    else if (x+paddlewidth > max_x)
+        x = max_x-paddlewidth;
+
+    if (movex < 0) {
+            // move to the right, remove on the left. left is higher number!
+            tft->fillRect(x+paddlewidth+1, pos_y, abs(movex)+1, paddleheight, ILI9486_BLACK);
+            pos_x += movex;
+            x += movex;
+            tft->fillRect(x, pos_y, abs(movex), paddleheight, TFT_YELLOW);
+        } else {
+            tft->fillRect(x - movex, pos_y, movex, paddleheight, ILI9486_BLACK);  // +paddlewidth
+            pos_x += movex;
+            x += movex;
+            tft->fillRect(x+paddlewidth, pos_y, movex, paddleheight, color);
+        }
+}
+
+void Paddle::update(float ballpos)  // only for justLine
 {
     int16_t half = paddlewidth / 2;
     int16_t old = (uint16_t) pos_x;

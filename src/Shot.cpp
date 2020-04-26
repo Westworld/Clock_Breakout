@@ -23,7 +23,13 @@ Shotsize Shot::GetSize(void) {
 }
 
 int16_t Shot::getX(void) {
-    return pos_x;
+    if (active) 
+        return pos_x;
+    else
+    {
+            return -1;
+    }
+    
 }
 
 int16_t Shot::getY(bool up) {
@@ -43,7 +49,7 @@ void Shot::activate(int16_t posx, int16_t posy, bool down) {
     pos_y = posy;
     if (down) {
         pos_y -= shotheight;
-        color = ILI9486_WHITE;
+        color = TFT_WHITE;
     }
     else
     {

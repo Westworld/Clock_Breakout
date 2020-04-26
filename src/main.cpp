@@ -57,7 +57,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-// #define rotate 1
+#define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
@@ -211,6 +211,8 @@ void CheckTime() {
     int16_t newgame = uhrzeit[2] % 3;  // 1
   
       GameType = newgame;
+//GameType=Space_Invader;
+
        switch (GameType) {
         case Arkonoid: 
           InitArkonid();
@@ -245,6 +247,7 @@ void InitArkonid() {
 
     tft->fillScreen(ILI9486_BLACK);
     blocks->setColor(ILI9486_YELLOW);
+    paddle->setType(true);
     paddle->draw();
     ball->SetY(20);
     blocks->Setup(uhrzeit);
@@ -304,7 +307,8 @@ void InitInvaders() {
    #endif
 
    GetTime();
-   blocks->setColor(ILI9486_WHITE);
+   blocks->setColor(TFT_WHITE);
+   paddle->setType(false);
    paddle->setX(tft->getwidth()/2);
    paddle->draw();
    blocks->Setup(uhrzeit);
@@ -344,7 +348,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
 
     if ((invaders_loopcounter % 15) == 1 ) {
       if (!shotup->move_draw()) {
-          shotup->activate(paddle->getX(), 12, false);
+          shotup->activate(paddle->getX(), 20, false);
         // new shot up, set x depending of paddle, which sets ative again      
       }
 
@@ -361,19 +365,29 @@ if (invaders_loopcounter < invaders_maxxloop) {
       int16_t x, paddlex;    
       x=shotdown->getX();
       paddlex = paddle->getX();
-      if (x >= (paddlex-1) || (x <= paddlex+1))  {
-        paddle->undraw();
-        if (x>paddlex) 
-          paddle->setX(paddlex-1);
-        else
-          paddle->setX(paddlex+1);
-          paddle->draw();  
+      if (x >= 0)  {
+        //paddle->undraw();
+        if (x>paddlex)  {
+          paddle->move(-1);
+        }  
+        else {
+          paddle->move(1);
+        }  
+        //paddle->draw();  
       }
       else {
         // no risk being hit, but do we have a block above us or do we need to move?
         paddlex = paddle->getX();
         x = blocks->findNearestBlock(paddlex);
-        paddle->setX(paddlex+x);
+ 
+        if (x != 0) {  
+          //paddle->undraw();  
+          if (x < 0)  
+            paddle->move(-2);
+          else
+            paddle->move(2);
+          //paddle->draw(); 
+        }  
       }
     }
 
