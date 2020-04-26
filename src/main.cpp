@@ -353,7 +353,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
       }
 
 
-      if (!shotdown->move_draw()) {  // untested
+      if (!shotdown->move_draw()) {  
           int16_t x, y;
           blocks->findNearestBlock(x, y, paddle->getX());
           if (x != 0)

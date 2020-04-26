@@ -23,8 +23,15 @@ Shotsize Shot::GetSize(void) {
 }
 
 int16_t Shot::getX(void) {
-    if (active) 
-        return pos_x;
+    if (active) {
+        if (pos_y>0)
+            return pos_x;
+        else
+        {
+            return 0;
+        }
+            
+    }    
     else
     {
             return -1;
@@ -79,7 +86,7 @@ int16_t Shot::move_draw(void) {
     if (active) {
         this->undraw();
         pos_y = pos_y + move_y;
-        if ((pos_y < 1) || (pos_y > max_x))
+        if ((pos_y < -150) || (pos_y > max_y))
             active = false;
         this->draw();  
     }
