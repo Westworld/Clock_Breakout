@@ -480,8 +480,8 @@ void TetrisMatrixDraw::setTime(String time, bool forceRefresh)
 
       //if (pos == 0) {
         if (number == 1) {
-            One_offset += (3 * this->scale);
-            xOffset -= (3 * this->scale);
+            One_offset += (2 * this->scale);
+            xOffset -= (2 * this->scale);
         }
 
       // Only change the number if its different or being forced

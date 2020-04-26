@@ -3,7 +3,7 @@
 
 #include "screen.h"
 
-#define shotwidth 3
+#define shotwidth 4
 #define shotheight 8
 #define shotspeed 1
 
