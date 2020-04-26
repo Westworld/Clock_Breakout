@@ -480,8 +480,8 @@ void TetrisMatrixDraw::setTime(String time, bool forceRefresh)
 
       //if (pos == 0) {
         if (number == 1) {
-            One_offset += (2 * this->scale);
-            xOffset -= (2 * this->scale);
+            One_offset += (4 * this->scale);
+            xOffset -= (4 * this->scale);
         }
 
       // Only change the number if its different or being forced
@@ -972,10 +972,10 @@ void TetrisMatrixDraw::drawColon(int x, int y, uint16_t colonColour){
   int colonSize = 2 * this->scale;
   int xColonPos = x + (TETRIS_DISTANCE_BETWEEN_DIGITS * 2 * this->scale) -10;  
   if (numstates[0].num_to_draw == 1) {
-    xColonPos -= (3 * this->scale);
+    xColonPos -= (4 * this->scale);
   }
   if (numstates[1].num_to_draw == 1) {
-    xColonPos -= (3 * this->scale);
+    xColonPos -= (4 * this->scale);
   }
   display->fillRect(xColonPos, y + (12 * this->scale), colonSize, colonSize, colonColour);
   display->fillRect(xColonPos, y + (8 * this->scale), colonSize, colonSize, colonColour);
