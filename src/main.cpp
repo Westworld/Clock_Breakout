@@ -57,7 +57,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-#define rotate 1
+//#define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
