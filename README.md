@@ -3,6 +3,9 @@
 Idea from project: 
 https://hackaday.io/project/169655-arkaclock-retro-arcade-arkanoid-with-clock
 
+Run clock for 10 minutes with Arkanoid, then 10 minutes Tetris, then 10 minutes Space Invaders, then restart with Arkanoid
+
+
 
 The source is written for two different versions.
 One with 2.4" 8bit parallel TFT 320x240 and ESP32 (with enough pins for 8bit parallel)
