@@ -61,7 +61,7 @@ byte uhrzeit[6] = {1, 2, 3, 0, 0, 0};
   int16_t last_sec  = -1;
 
 #define NTP_SERVER "de.pool.ntp.org"
-#define TZ_INFO "WEST-1DWEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00" // Western European Time
+#define TZ_INFO "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
 const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
@@ -105,6 +105,7 @@ Serial.begin(115200);
      time_t now;
      struct tm * timeinfo;
      configTime(1 * 3600, 1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
+       setenv("TZ", TZ_INFO, 1);
      tft->drawText("waiting for time",0,30);
      while (!time(nullptr)) {
         Serial.print(".");
@@ -115,6 +116,15 @@ Serial.begin(115200);
    #endif
 
    tft->drawText("got time",0,40);
+
+
+   // Initialise SPIFFS
+  if (!SPIFFS.begin()) {
+    tft->drawText("SPIFFS ERROR",0,60);
+  }
+  else
+    tft->drawText("SPIFFS ready",0,60);
+
    delay(2000);
    tft->fillScreen(ILI9486_BLACK);
    #ifdef rotate
@@ -123,12 +133,6 @@ Serial.begin(115200);
    tft->setRotation(3); 
    #endif
 
-   // Initialise SPIFFS
-  if (!SPIFFS.begin()) {
-    tft->drawText("SPIFFS ERROR",0,60);
-  }
-  else
-    tft->drawText("SPIFFS ready",0,60);
     // The jpeg image can be scaled by a factor of 1, 2, 4, or 8
   TJpgDec.setJpgScale(1);
   // The decoder must be given the exact name of the rendering function above
@@ -469,6 +473,9 @@ void tetristest() {
   Serial.print("Width = "); Serial.print(w); Serial.print(", height = "); Serial.println(h);
 
   // Draw the image, top left at 0,0
+
+  // vertikal in der Mitte
+  //Nach Uhrzeit, Breite berücksichtigen
   TJpgDec.drawFsJpg(0, 0, "/movie/1.jpg");
 
     yield();
