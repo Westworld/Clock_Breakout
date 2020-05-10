@@ -1,14 +1,22 @@
+
+
 #ifdef TARGET_esp32
 #include "WiFi.h"
 #include <WiFiMulti.h>
 #endif
-#ifdef TARGET_8266
 
+#ifdef TARGET_8266
 //#include <ESP8266mDNS.h>
-#include "FS.h"
 #include <WiFiUdp.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
+#endif
+
+// Include SPIFFS
+#define FS_NO_GLOBALS
+#include <FS.h>
+#ifdef ESP32
+  #include "SPIFFS.h" // ESP32 only
 #endif
 
 #include <Arduino.h>
@@ -24,6 +32,7 @@
 #include <Console.h>
 
 #include <TetrisMatrixDraw.h>
+#include <TJpg_Decoder.h>
 
 //#include "../../../wifisetting.h"
 
@@ -57,7 +66,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-//#define rotate 1
+#define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
@@ -113,6 +122,17 @@ Serial.begin(115200);
    #else
    tft->setRotation(3); 
    #endif
+
+   // Initialise SPIFFS
+  if (!SPIFFS.begin()) {
+    tft->drawText("SPIFFS ERROR",0,60);
+  }
+  else
+    tft->drawText("SPIFFS ready",0,60);
+    // The jpeg image can be scaled by a factor of 1, 2, 4, or 8
+  TJpgDec.setJpgScale(1);
+  // The decoder must be given the exact name of the rendering function above
+  TJpgDec.setCallback(tft_output);
    
    ball = new Ball(tft);
    ball->setAngle(37);
@@ -125,12 +145,16 @@ Serial.begin(115200);
    shotdown = new Shot(tft, -8);
 
       //for (short i=0; i<3; i++)
-   //tetristest(); 
+   tetristest(); 
 
    CheckTime();
 }
 
 
+bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) {
+  tft->tft_output(x, y, w, h, bitmap);
+
+}
 
 void ConnectWifi() {
  WiFi.mode(WIFI_STA);
@@ -432,100 +456,22 @@ void loop() {
 
 void tetristest() {
    #ifdef rotate
-   tft->setRotation(1); 
-   #else
    tft->setRotation(3); 
+   #else
+   tft->setRotation(1); 
    #endif
   tft->fillScreen(ILI9486_BLACK);
+  tft->tft_setSwapBytes(true);
 
-    #ifdef TARGET_8266
-   SetGame(Space_Invader, 4);
-   #else
-   SetGame(Space_Invader, 2);
-   #endif
+    // Get the width and height in pixels of the jpeg if you wish
+  uint16_t w = 0, h = 0;
+  TJpgDec.getFsJpgSize(&w, &h, "/movie/1.jpg"); // Note name preceded with "/"
+  Serial.print("Width = "); Serial.print(w); Serial.print(", height = "); Serial.println(h);
 
-   GetTime();
-
-   paddle->draw();
-   blocks->Setup(uhrzeit);
-   shotup->deactivate();
-   shotdown->deactivate();
-
-
-  int16_t move_x = 0, move_y = 0;
-  int16_t domovex = -5, domovey = 0;
-
-  int16_t loopcounter = 0, loopx = 0, blockcounter = 0;
-  int16_t maxxloop = 32 * numberblocks * 10;  // 24000
-  while (loopcounter < maxxloop) {
-    if (blockcounter <=numberblocks) {
-      blocks->draw(move_x, move_y, blockcounter++, domovex, domovey);
-    }
-    else {
-        blockcounter = 0;
-        move_x += domovex;
-        if (domovey != 0) {
-          move_y -= 15;
-          domovey = 0;
-        } 
-
-      if (++loopx >=32 ) {
-          loopx = 0;
-          domovey = -15;
-          domovex = -domovex;
-      }  
-    }
-
-    loopcounter++;
-
-    if ((loopcounter % 15) == 1 ) {
-      if (!shotup->move_draw()) {
-          shotup->activate(paddle->getX(), 12, false);
-        // new shot up, set x depending of paddle, which sets ative again      
-      }
-
-
-      if (!shotdown->move_draw()) {  // untested
-          int16_t x, y;
-          blocks->findNearestBlock(x, y, paddle->getX());
-          if (x != 0)
-            shotdown->activate(x, y, true);
-      } 
-
-          // move paddle to follow lowest block, avoid shotdown
-          // first check if shot is coming down, if yes move left/right (opposite of shot)
-      int16_t x, paddlex;    
-      x=shotdown->getX();
-      paddlex = paddle->getX();
-      if (x >= (paddlex-1) || (x <= paddlex+1))  {
-        paddle->undraw();
-        if (x>paddlex) 
-          paddle->setX(paddlex-1);
-        else
-          paddle->setX(paddlex+1);
-          paddle->draw();  
-      }
-      else {
-        // no risk being hit, but do we have a block above us or do we need to move?
-        paddlex = paddle->getX();
-        x = blocks->findNearestBlock(paddlex);
-        paddle->setX(paddlex+x);
-      }
-    }
-
-
-    if (blocks->checkShot(shotup->getX(), shotup->getY(true))) 
-      {  // check hit on block ####################
-            shotup->deactivate();
-      }
-
-
+  // Draw the image, top left at 0,0
+  TJpgDec.drawFsJpg(0, 0, "/movie/1.jpg");
 
     yield();
-    delay(2);
-  }
+    delay(10000);
 
-  // schuß stoppt wenn ganz oben oder treffer auf block
-
-  delay(5000);
 }

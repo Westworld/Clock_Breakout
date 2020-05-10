@@ -96,7 +96,8 @@ public:
     void Tetris_DrawChar(String letter, uint8_t x, uint8_t y, uint16_t color);
     void Tetris_drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot);
 
-
+    bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap);
+    void tft_setSwapBytes(bool swap);
 };
 
 #endif // SCREEN_HPP_
