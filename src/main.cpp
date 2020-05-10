@@ -466,6 +466,7 @@ void tetristest() {
    #endif
   tft->fillScreen(ILI9486_BLACK);
   tft->tft_setSwapBytes(true);
+  GetTime();
 
     // Get the width and height in pixels of the jpeg if you wish
   uint16_t w = 0, h = 0;
@@ -476,7 +477,20 @@ void tetristest() {
 
   // vertikal in der Mitte
   //Nach Uhrzeit, Breite berücksichtigen
-  TJpgDec.drawFsJpg(0, 0, "/movie/1.jpg");
+  uint16_t posy = (tft->getheight()/2)-(h/2);
+  char filename[] = "/movie/1.jpg";
+  filename[7] = 48+uhrzeit[0];
+  Serial.print(filename);
+  TJpgDec.drawFsJpg(0, posy, filename);
+
+  filename[7] = 48+uhrzeit[1];
+  TJpgDec.drawFsJpg(w, posy, filename);
+
+    filename[7] = 48+uhrzeit[2];
+  TJpgDec.drawFsJpg(w+w, posy, filename);
+
+    filename[7] = 48+uhrzeit[3];
+  TJpgDec.drawFsJpg(w+w+w, posy, filename);
 
     yield();
     delay(10000);
