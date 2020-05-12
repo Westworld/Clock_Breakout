@@ -149,7 +149,7 @@ Serial.begin(115200);
    shotdown = new Shot(tft, -8);
 
       //for (short i=0; i<3; i++)
-   tetristest(); 
+   //tetristest(); 
 
    CheckTime();
 }
@@ -236,21 +236,36 @@ void CheckTime() {
 
   if ((cur_hour != last_hour) || (cur_min != last_min)) {
 
-    int16_t newgame = uhrzeit[2] % 3;  // 1
+    int16_t newgame = uhrzeit[2] % 6;  
   
-      GameType = newgame;
+      
 //GameType=Space_Invader;
 
        switch (GameType) {
-        case Arkonoid: 
+        case Arkonoid:  // 0
+          GameType = Arkonoid;
           InitArkonid();
           break;
         case Tetris: 
+          GameType = Tetris;
           InitTetris();
           break;
         case Space_Invader: 
+          GameType = Space_Invader;
           InitInvaders();
-          break;         
+          break;    
+        case 3:  // 0
+          GameType = Arkonoid;
+          InitArkonid();
+          break;
+        case 4: 
+          GameType = Pict_Clock;
+          InitClock();
+          break;
+        case 5: 
+          GameType = Space_Invader;
+          InitInvaders();
+          break;                
         default:
           // nothing 
           ;
@@ -429,6 +444,83 @@ if (invaders_loopcounter < invaders_maxxloop) {
   }
 }
 
+void InitClock() {
+  #ifdef rotate
+   tft->setRotation(3); 
+   #else
+   tft->setRotation(1); 
+   #endif
+  tft->fillScreen(ILI9486_BLACK);
+  tft->tft_setSwapBytes(true);
+  GetTime();
+}
+
+void PlayClock() {
+    // Get the width and height in pixels of the jpeg if you wish
+  uint16_t w = 0, h = 0;
+  
+  static byte altMinute=-1;
+
+  if (altMinute != uhrzeit[3]) {
+     altMinute = uhrzeit[3];
+ 
+      char filename[] = "/0/1.jpg";
+      int16_t minute = uhrzeit[3] % 10; 
+      switch (minute) {
+            case 0:  // 0
+              filename[1] = '0';
+              break;
+            case 1:  // 0
+              filename[1] = '1';
+              break;
+            case 2:  // 0
+              filename[1] = '2';
+              break;
+            case 3:  // 0
+              filename[1] = '3';
+              break;
+            case 4:  // 0
+              filename[1] = '4';
+              break;
+            case 5: 
+              filename[1] = '0';
+              break; 
+            case 6: 
+              filename[1] = '1';
+              break; 
+            case 7: 
+              filename[1] = '2';
+              break; 
+            case 8: 
+              filename[1] = '3';
+              break;                    
+            case 9: 
+              filename[1] = '4';
+              break;  
+            default:
+            ;
+      }        
+
+    TJpgDec.getFsJpgSize(&w, &h, filename); // Note name preceded with "/"
+      // vertikal in der Mitte
+      //Nach Uhrzeit, Breite berücksichtigen
+      uint16_t posy = (tft->getheight()/2)-(h/2);
+
+      filename[3] = 48+uhrzeit[0];
+      Serial.print(filename);
+      TJpgDec.drawFsJpg(0, posy, filename);
+
+      filename[3] = 48+uhrzeit[1];
+      TJpgDec.drawFsJpg(w, posy, filename);
+
+        filename[3] = 48+uhrzeit[2];
+      TJpgDec.drawFsJpg(w+w, posy, filename);
+
+        filename[3] = 48+uhrzeit[3];
+      TJpgDec.drawFsJpg(w+w+w, posy, filename);
+  }
+}
+
 
 void loop() {
 
@@ -450,6 +542,10 @@ void loop() {
       PlayInvaders();
       delay(2);
       break; 
+    case Pict_Clock: 
+      PlayClock();
+      delay(100);
+      break;   
     default:
       // nothing 
       ;
