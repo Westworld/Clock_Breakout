@@ -373,7 +373,8 @@ void InitInvaders() {
 
 void ResetInvaders() {
    // new game, stop old. Mark all surviving blocks red!
-   
+  blocks->ClearSurvivingBlocks(invaders_move_x, invaders_move_y);
+  delay(1000);
 }
 
 void PlayInvaders() {

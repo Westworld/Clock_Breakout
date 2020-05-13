@@ -222,11 +222,13 @@ int16_t Blocks::findNearestBlock(int16_t paddle_x) {
     return x;
 }
 
-void Blocks::ClearSurvivingBlocks(void) {
+void Blocks::ClearSurvivingBlocks(int16_t old_x, int16_t old_y) {
   // for space invader to start new game
     for (int16_t i=0; i<numberblocks; i++) {
         if ((allblocks[i]->used) && (allblocks[i]->active)) {
             allblocks[i]->setColor(ILI9486_RED);
+            allblocks[i]->draw(tft, old_x, old_y);
+            delay(2);
         }
     }  
 }

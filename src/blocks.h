@@ -32,7 +32,7 @@ public:
     void drawBlock(int16_t curBlock);
     void findNearestBlock(int16_t &x, int16_t &y, int16_t paddle_x);
     int16_t findNearestBlock(int16_t paddle_x);
-    void ClearSurvivingBlocks(void);
+    void ClearSurvivingBlocks(int16_t old_x, int16_t old_y);
     void setColor(int16_t thecolor);
 };
 
