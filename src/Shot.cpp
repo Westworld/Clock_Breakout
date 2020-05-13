@@ -24,7 +24,7 @@ Shotsize Shot::GetSize(void) {
 
 int16_t Shot::getX(void) {
     if (active) {
-        if (pos_y>0)
+        if ((pos_y>0) && (pos_y < max_y))
             return pos_x;
         else
         {

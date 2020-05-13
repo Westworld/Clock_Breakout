@@ -361,11 +361,11 @@ void InitInvaders() {
    shotdown->deactivate();
 
 
-  invaders_move_x = 0, invaders_move_y = 0;
+  invaders_move_x = 10, invaders_move_y = 0;
   invaders_domovex = -5, invaders_domovey = 0;
 
   invaders_loopcounter = 0, invaders_loopx = 0, invaders_blockcounter = 0;
-  invaders_maxxloop = 32 * numberblocks * 15;  // 24000
+  invaders_maxxloop = 31 * numberblocks * 15;  // 24000
 }
 
 void PlayInvaders() {
@@ -382,7 +382,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
           invaders_domovey = 0;
         } 
 
-      if (++invaders_loopx >=32 ) {
+      if (++invaders_loopx >=31 ) {
           invaders_loopx = 0;
           invaders_domovey = -15;
           invaders_domovex = -invaders_domovex;
@@ -410,7 +410,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
       int16_t x, paddlex;    
       x=shotdown->getX();
       paddlex = paddle->getX();
-      if (x >= 0)  {
+      if (x > 0)  {
         //paddle->undraw();
         if (x>paddlex)  {
           paddle->move(-1);
