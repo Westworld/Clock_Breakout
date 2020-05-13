@@ -9,6 +9,7 @@ void PlayTetris();
 void InitTetris();
 void InitInvaders();
 void PlayInvaders();
+void ResetInvaders();
 void InitClock();
 void PlayClock();
 

@@ -79,7 +79,7 @@ void Paddle::move(int16_t movex)  // only for block
             x += movex;
             tft->fillRect(x, pos_y, abs(movex), paddleheight, ILI9486_YELLOW);
         } else {
-            tft->fillRect(x - movex, pos_y, movex, paddleheight, ILI9486_BLACK);  // +paddlewidth
+            tft->fillRect(x - movex, pos_y, movex+1, paddleheight, ILI9486_BLACK);  // +paddlewidth
             pos_x += movex;
             x += movex;
             tft->fillRect(x+paddlewidth, pos_y, movex, paddleheight, color);

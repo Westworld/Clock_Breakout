@@ -221,3 +221,12 @@ int16_t Blocks::findNearestBlock(int16_t paddle_x) {
     }    
     return x;
 }
+
+void Blocks::ClearSurvivingBlocks(void) {
+  // for space invader to start new game
+    for (int16_t i=0; i<numberblocks; i++) {
+        if ((allblocks[i]->used) && (allblocks[i]->active)) {
+            allblocks[i]->setColor(ILI9486_RED);
+        }
+    }  
+}
