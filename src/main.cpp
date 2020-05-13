@@ -66,7 +66,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-#define rotate 1
+// #define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
@@ -104,8 +104,9 @@ Serial.begin(115200);
    #ifdef TARGET_8266
      time_t now;
      struct tm * timeinfo;
+     //setenv("TZ", TZ_INFO, 1);
      configTime(1 * 3600, 1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
-       setenv("TZ", TZ_INFO, 1);
+     
      tft->drawText("waiting for time",0,30);
      while (!time(nullptr)) {
         Serial.print(".");
@@ -149,7 +150,7 @@ Serial.begin(115200);
    shotdown = new Shot(tft, -8);
 
       //for (short i=0; i<3; i++)
-   //tetristest(); 
+  // tetristest(); 
 
    CheckTime();
 }
@@ -241,7 +242,7 @@ void CheckTime() {
       
 //GameType=Space_Invader;
 
-       switch (GameType) {
+       switch (newgame) {
         case Arkonoid:  // 0
           GameType = Arkonoid;
           InitArkonid();
@@ -273,6 +274,7 @@ void CheckTime() {
     last_hour = cur_hour;
     last_min = cur_min;
     last_sec = cur_sec;
+
   }
 }
 
@@ -566,7 +568,7 @@ void tetristest() {
 
     // Get the width and height in pixels of the jpeg if you wish
   uint16_t w = 0, h = 0;
-  TJpgDec.getFsJpgSize(&w, &h, "/movie/1.jpg"); // Note name preceded with "/"
+  TJpgDec.getFsJpgSize(&w, &h, "/1/1.jpg"); // Note name preceded with "/"
   Serial.print("Width = "); Serial.print(w); Serial.print(", height = "); Serial.println(h);
 
   // Draw the image, top left at 0,0
@@ -574,21 +576,21 @@ void tetristest() {
   // vertikal in der Mitte
   //Nach Uhrzeit, Breite berücksichtigen
   uint16_t posy = (tft->getheight()/2)-(h/2);
-  char filename[] = "/movie/1.jpg";
-  filename[7] = 48+uhrzeit[0];
+  char filename[] = "/1/1.jpg";
+  filename[3] = 48+uhrzeit[0];
   Serial.print(filename);
   TJpgDec.drawFsJpg(0, posy, filename);
 
-  filename[7] = 48+uhrzeit[1];
+  filename[3] = 48+uhrzeit[1];
   TJpgDec.drawFsJpg(w, posy, filename);
 
-    filename[7] = 48+uhrzeit[2];
+    filename[3] = 48+uhrzeit[2];
   TJpgDec.drawFsJpg(w+w, posy, filename);
 
-    filename[7] = 48+uhrzeit[3];
+    filename[3] = 48+uhrzeit[3];
   TJpgDec.drawFsJpg(w+w+w, posy, filename);
 
     yield();
     delay(10000);
-
+tft->fillScreen(ILI9486_RED);
 }
