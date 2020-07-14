@@ -66,7 +66,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-#define rotate 1
+//#define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
@@ -446,7 +446,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
     }
 
     if (blocks->checkShot(shotup->getX(), shotup->getY(true))) 
-      {  // check hit on block ####################
+      {  // check hit on block 
             shotup->deactivate();
       }
 
@@ -476,7 +476,7 @@ void PlayClock() {
      altMinute = uhrzeit[3];
  
       char filename[] = "/0/1.jpg";
-      int16_t minute = uhrzeit[3] % 10; 
+      int16_t minute = random(0,10); //uhrzeit[3] % 10; 
       switch (minute) {
             case 0:  // 0
               filename[1] = '0';

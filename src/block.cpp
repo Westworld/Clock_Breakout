@@ -53,6 +53,14 @@ void Block::draw(Screen * tft)
     } 
 }
 
+void Block::drawendofgame(Screen * tft, uint16_t newcolor)
+{
+    if (used) {
+        if (active)
+            tft->fillRect(last_pos_x, last_pos_y, blockwidth, blockheight, newcolor);     
+    } 
+}
+
 void Block::draw(Screen * tft, int16_t move_x, int16_t move_y)
 {
     if (used) {
@@ -63,7 +71,6 @@ void Block::draw(Screen * tft, int16_t move_x, int16_t move_y)
         }    
         else
         {
-            //tft->fillRect(pos_x, pos_y, blockwidth, blockheight, ILI9486_YELLOW2);
             tft->drawRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, color);
             tft->drawRect(pos_x+1+move_x, pos_y+1+move_y, blockwidth-2, blockheight-2, color);
         }

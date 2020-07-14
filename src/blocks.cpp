@@ -226,8 +226,9 @@ void Blocks::ClearSurvivingBlocks(int16_t old_x, int16_t old_y) {
   // for space invader to start new game
     for (int16_t i=0; i<numberblocks; i++) {
         if ((allblocks[i]->used) && (allblocks[i]->active)) {
-            allblocks[i]->setColor(ILI9486_RED);
-            allblocks[i]->draw(tft, old_x, old_y);
+           // allblocks[i]->setColor(TFT_RED);
+            allblocks[i]->drawendofgame(tft, TFT_RED);
+            //allblocks[i]->draw(tft, old_x, old_y);  // wrong position
             delay(2);
         }
     }  

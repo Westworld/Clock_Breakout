@@ -1,1 +1,3 @@
 https://github.com/AndreasRef/InstaClock
+
+upload using platformio icon, project tasks, upload file system image

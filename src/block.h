@@ -42,6 +42,7 @@ public:
     void setUnused(void);
     //void update(float ballpos);;
     void draw(Screen * mastertft);
+    void drawendofgame(Screen * mastertft, uint16_t newcolor);
     void draw(Screen * mastertft, Ballsize ballsize);
     void draw(Screen * mastertft, int16_t move_x, int16_t move_y);
     void draw(Screen * tft, int16_t move_x, int16_t move_y, int16_t othercolor);
