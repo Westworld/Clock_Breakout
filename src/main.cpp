@@ -34,6 +34,8 @@
 #include <TetrisMatrixDraw.h>
 #include <TJpg_Decoder.h>
 
+#include <time.h>  
+
 //#include "../../../wifisetting.h"
 
 // don't forget to set in Console.h debug = none
@@ -61,12 +63,13 @@ byte uhrzeit[6] = {1, 2, 3, 0, 0, 0};
   int16_t last_sec  = -1;
 
 #define NTP_SERVER "de.pool.ntp.org"
-#define TZ_INFO "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
+//#define TZ_INFO "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
+#define MY_TZ "CET-1CEST,M3.5.0/02,M10.5.0/03" 
 const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-#define rotate 1
+//#define rotate 1
 
 // Tetris
 bool twelveHourFormat = true;
@@ -103,17 +106,20 @@ Serial.begin(115200);
    #endif
    #ifdef TARGET_8266
      time_t now;
-     struct tm * timeinfo;
+     //struct tm * timeinfo;
+     tm tm;
      //setenv("TZ", TZ_INFO, 1);
-     configTime(1 * 3600, 1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
-     
+     //configTime(1 * 3600,1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
+   
+     configTime(MY_TZ, NTP_SERVER); 
      tft->drawText("waiting for time",0,30);
      while (!time(nullptr)) {
         Serial.print(".");
         delay(1000);
      }
      time(&now);
-     timeinfo = localtime(&now); 
+    // timeinfo = localtime(&now); 
+    localtime_r(&now, &tm); 
    #endif
 
    tft->drawText("got time",0,40);
