@@ -124,7 +124,6 @@ Serial.begin(115200);
 
    tft->drawText("got time",0,40);
 
-
    // Initialise SPIFFS
   if (!SPIFFS.begin()) {
     tft->drawText("SPIFFS ERROR",0,60);
