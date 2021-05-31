@@ -69,7 +69,7 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-//#define rotate 1
+// #define rotate 0  // home: define
 
 // Tetris
 bool twelveHourFormat = true;
@@ -499,19 +499,19 @@ void PlayClock() {
               filename[1] = '4';
               break;
             case 5: 
-              filename[1] = '0';
+              filename[1] = '5';
               break; 
             case 6: 
-              filename[1] = '1';
+              filename[1] = '6';
               break; 
             case 7: 
-              filename[1] = '2';
+              filename[1] = '7';
               break; 
             case 8: 
-              filename[1] = '3';
+              filename[1] = '8';
               break;                    
             case 9: 
-              filename[1] = '4';
+              filename[1] = '9';
               break;  
             default:
             ;
