@@ -69,7 +69,14 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-// #define rotate 0  // home: define
+// ########### home - office:
+#define rotate 0  // home: define
+/*
+and modify User_Setup_Select.h:
+//#include <User_Setups/Setup5_RPi_ILI9486.h>        // Setup file configured for my stock RPi TFT   company #####
+#include <User_Setups/Setup20_ILI9488.h>           // Setup file for ESP8266 and ILI9488 SPI bus TFT   ###home#####
+
+*/
 
 // Tetris
 bool twelveHourFormat = true;
