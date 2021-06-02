@@ -528,6 +528,7 @@ void PlayClock() {
       // vertikal in der Mitte
       //Nach Uhrzeit, Breite berücksichtigen
       uint16_t posy = (tft->getheight()/2)-(h/2);
+      if(minute>=4) w+=5;
 
       filename[3] = 48+uhrzeit[0];
       Serial.print(filename);
