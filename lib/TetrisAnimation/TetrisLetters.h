@@ -1028,6 +1028,8 @@ fall_instr_let getFallinstrByAscii(int num, int blockindex)
     case 90:
         return a90[blockindex];
         break;
+    default:
+        return a90[blockindex]; // Should never happen     
   }
     
 }

@@ -1,3 +1,4 @@
+
 // *********************************************************************
 // Types and data that describes how numbers are drawed
 // *********************************************************************
@@ -228,4 +229,5 @@ fall_instr getFallinstrByNum(int num, int blockindex)
   {
     return num_9[blockindex];
   }
+return num_0[blockindex]; // should never happen  
 }
