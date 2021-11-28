@@ -177,6 +177,10 @@ void Screen::drawRect(int16_t x, int16_t y, int16_t width, int16_t height, uint1
     tft.drawRect(x, y, width, height, color);
 }
 
+void Screen::drawRoundRect(int16_t x, int16_t y, int16_t width, int16_t height, int16_t corner, uint16_t color) {
+    tft.drawRoundRect(x, y, width, height, corner, color);
+}
+
 void Screen::drawText(String text, int16_t x, int16_t y) {
         tft.setTextColor(ILI9486_YELLOW, ILI9486_BLACK);
         tft.setCursor(x, y);
@@ -188,6 +192,11 @@ void Screen::fillScreen(uint16_t color) {
     tft.fillScreen(color);
 }
 
+void Screen::drawicon(int x, int y, const uint16_t *icon) { // Draws the graphics icons based on stored image bitmaps  
+
+ tft.pushImage(x, y, 28, 28, icon);
+  
+}
 
 
 void Screen::Tetris_setText(String txt, bool forceRefresh) {

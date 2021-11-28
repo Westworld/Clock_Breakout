@@ -81,9 +81,13 @@ public:
     void fillRect(int16_t x, int16_t y, int16_t radius, uint16_t color);
     void fillRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color);
     void drawRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color);
+    void drawRoundRect(int16_t x, int16_t y, int16_t width, int16_t height, int16_t corner, uint16_t color);
     void drawText(String text, int16_t x, int16_t y);
     void setRotation(int16_t rot);
     void fillScreen(uint16_t color);
+    void drawicon(int x, int y, const uint16_t *icon); 
+
+
     int8_t getPinName(int8_t pin);
 
     void Tetris_setText(String txt, bool forceRefresh);

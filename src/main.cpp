@@ -27,6 +27,8 @@
 #include "paddle.h"
 #include "blocks.h"
 #include "shot.h"
+
+#include "Pacman.h"
 //#include "ntp_time.h"
 
 #include <Console.h>
@@ -69,13 +71,15 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
+
+
 // ########### home - office:
 #define rotate 0  // home: define
 /*
 and modify User_Setup_Select.h:
 //#include <User_Setups/Setup5_RPi_ILI9486.h>        // Setup file configured for my stock RPi TFT   company #####
 #include <User_Setups/Setup20_ILI9488.h>           // Setup file for ESP8266 and ILI9488 SPI bus TFT   ###home#####
-
+480x320 pixel
 */
 
 // Tetris
@@ -93,6 +97,8 @@ bool forceRefresh = true;
 void setup() {
 Serial.begin(115200);
 //Serial.setDebugOutput(true);
+
+randomSeed(analogRead(0));
 
    tft = new Screen();
    #ifdef rotate
@@ -163,6 +169,9 @@ Serial.begin(115200);
 
       //for (short i=0; i<3; i++)
   // tetristest(); 
+
+  pacman_init(tft) ;
+  pactest();
 
    CheckTime();
 }
