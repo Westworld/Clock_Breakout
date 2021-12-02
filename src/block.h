@@ -22,7 +22,7 @@
 #endif
 */
 
-enum { Arkonoid, Tetris, Space_Invader, Pict_Clock };
+enum { Arkonoid, Tetris, Space_Invader, Pict_Clock, Pacman };
 
 
 

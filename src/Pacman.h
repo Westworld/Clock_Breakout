@@ -38,8 +38,16 @@
 #include "pacman/rr_ghost.h"
 
 void pacman_init(Screen * mastertft) ;
-void pactest();
+void pacman_run();
 
 void drawscreen();
+void UpdateDisp();
+void printscoreboard();
+void drawfruit(); 
+void refreshgame();
+void displaypacman();
+void displayghost();
 
+void drawPacman(int x, int y, int p, int d, int pd);
+void drawGhost(int x, int y, int d, int pd);
 #endif
