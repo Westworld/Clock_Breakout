@@ -39,6 +39,7 @@
 
 void pacman_init(Screen * mastertft) ;
 void pacman_run();
+void setgamespeed(short userspeedsetting);
 
 void drawscreen();
 void UpdateDisp();
