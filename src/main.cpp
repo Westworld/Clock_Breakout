@@ -1,3 +1,4 @@
+//#define rotate 0  // home: define
 
 
 #ifdef TARGET_esp32
@@ -74,7 +75,6 @@ int16_t loopcounter=0;
 
 
 // ########### home - office:
-#define rotate 0  // home: define
 /*
 and modify User_Setup_Select.h:
 //#include <User_Setups/Setup5_RPi_ILI9486.h>        // Setup file configured for my stock RPi TFT   company #####

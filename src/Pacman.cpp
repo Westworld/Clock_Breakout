@@ -79,9 +79,9 @@ Serial.println("packman init");
     myGLCD->setOffset(60, 40);
 
    #ifdef rotate
-   myGLCD->setRotation(1);   // reverse !!!
+   myGLCD->setRotation(3);   // reverse !!!
    #else
-   myGLCD->setRotation(3); 
+   myGLCD->setRotation(1); 
    #endif
 
     // Initialize Dot Array
