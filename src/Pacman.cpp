@@ -27,8 +27,6 @@ boolean xsetup = false; // Flag to determine if existing setup mode
 int pacmanscore = 0;
 int ghostscore = 0;
 
-int userspeedsetting = 1; // user can set normal, fast, crazy speed for the pacman animation
-
 int gamespeed = 22; // Delay setting in mS for game default is 18
 int cstep = 2; // Provides the resolution of the movement for the Ghost and Pacman character. Origially set to 2
 
@@ -90,9 +88,26 @@ Serial.println("packman init");
     }
 
   c1=-1; c2=-1; c3=-1; c4=-1;
+
+  setgamespeed(random(2)+1);  // new game between 0-5
   
   drawscreen();
   UpdateDisp();
+}
+
+void setgamespeed(short userspeedsetting){
+
+ if (userspeedsetting == 1) {
+  gamespeed = 22;
+} else
+if (userspeedsetting == 2) {
+  gamespeed = 14;
+} else
+if (userspeedsetting == 3) {
+  gamespeed = 0;
+}
+
+dly = gamespeed; // Reset the game speed  
 }
 
 void pacman_run() {
