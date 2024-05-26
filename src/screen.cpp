@@ -83,8 +83,9 @@ void Screen::setTextSize(int16_t size) {
 
 void Screen::drawText(String text, int16_t x, int16_t y) {
         tft.setTextColor(ILI9486_YELLOW, ILI9486_BLACK);
-        tft.setCursor(x + x_offset, y + y_offset);
-        tft.println(text);
+        //tft.setCursor(x + x_offset, y + y_offset);
+        tft.drawString(text, x + x_offset, y + y_offset, 2);
+        //tft.println(text);
         
 }
 

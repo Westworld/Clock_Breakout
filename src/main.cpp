@@ -60,23 +60,25 @@ bool forceRefresh = true;
 void setup() {
 Serial.begin(115200);
 
-randomSeed(analogRead(0));
-
    tft = new Screen();
    #ifdef rotate
    tft->setRotation(3); 
    #else
    tft->setRotation(1); 
    #endif
-   tft->fillScreen(ILI9486_BLACK);
+   tft->fillScreen(ILI9341_BLACK);
    tft->setTextSize(2);
 
 
-   tft->drawText("Start",0,0);
-   delay(1);
+   tft->drawText("Start",00,00);
+   delay(2000);
+   Serial.println("before Wifi");
+
+    
    //tft->test();
    ConnectWifi();
-       
+    Serial.println("after Wifi");
+    delay(2000);
      struct tm local;
      configTzTime(MY_TZ, NTP_SERVER); // ESP32 Systemzeit mit NTP Synchronisieren
      getLocalTime(&local, 10000);      // Versuche 10 s zu Synchronisieren
@@ -193,7 +195,7 @@ void CheckTime() {
   }
   else {    
        if (newgame == 5)
-        newgame =  random(5);  // new game between 0-5
+        newgame =  random(4);  // new game between 0-5
 
        switch (newgame) {
         case Arkonoid:  // 0
@@ -219,14 +221,11 @@ void CheckTime() {
           GameType = Pacman;
           pacman_init(tft);
           break;
-
-        case 5: 
+                     
+        default:
           GameType = Pacman;  // random?
           pacman_init(tft);
-          break;                
-        default:
-          // nothing 
-          ;
+          break;    
         }  
   }     
     last_hour = cur_hour;
