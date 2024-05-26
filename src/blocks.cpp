@@ -1,7 +1,5 @@
 #include "Blocks.h"
-
-#include <Console.h>
-#include <digits.h>
+#include "digits.h"
 
 extern int16_t blockwidth, blockheight, blockstartx, blockstarty, blockoffset;
 

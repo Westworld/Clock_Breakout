@@ -1,5 +1,4 @@
 #include "Block.h"
-#include <Console.h>
 
 
 // cannot use #define, as size depending of game type

@@ -21,11 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #include "TetrisNumbers.h"
 #include "TetrisLetters.h"
 
- #ifdef TARGET_8266
- TetrisMatrixDraw::TetrisMatrixDraw(TFT_eSPI &display)	{
-        #else
-  TetrisMatrixDraw::TetrisMatrixDraw(Adafruit_GFX &display)	{
-        #endif
+  // modified from original library - https://github.com/toblum/TetrisAnimation/blob/master/src/TetrisMatrixDraw.cpp
+  TetrisMatrixDraw::TetrisMatrixDraw(TFT_eSPI &display)	{
 
     this->display = &display;
     intialiseColors();

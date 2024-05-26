@@ -1,25 +1,10 @@
-//#define rotate 0  // home: define
-
-
-#ifdef TARGET_esp32
 #include "WiFi.h"
 #include <WiFiMulti.h>
-#endif
-
-#ifdef TARGET_8266
-//#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#endif
 
 // Include SPIFFS
 #define FS_NO_GLOBALS
 #include <FS.h>
-#ifdef ESP32
-  #include "SPIFFS.h" // ESP32 only
-#endif
-
+#include "SPIFFS.h" 
 #include <Arduino.h>
 
 #include "main.h"
@@ -28,20 +13,12 @@
 #include "paddle.h"
 #include "blocks.h"
 #include "shot.h"
-
 #include "Pacman.h"
-//#include "ntp_time.h"
-
-#include <Console.h>
 
 #include <TetrisMatrixDraw.h>
 #include <TJpg_Decoder.h>
 
 #include <time.h>  
-
-//#include "../../../wifisetting.h"
-
-// don't forget to set in Console.h debug = none
 
 Screen * tft;
 Ball * ball;
@@ -53,12 +30,7 @@ Shot * shotdown;
 
 short GameType = -1; // first 10 minutes Pacman  // 0 = Arkonid, 1 = Tetris
 
-#ifdef TARGET_esp32
 WiFiMulti wifiMulti;
-#endif
-#ifdef TARGET_8266
-ESP8266WiFiMulti wifiMulti;
-#endif
 
 byte uhrzeit[6] = {1, 2, 3, 0, 0, 0};
   int16_t last_hour = -1;
@@ -72,15 +44,6 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
-
-
-// ########### home - office:
-/*
-and modify User_Setup_Select.h:
-//#include <User_Setups/Setup5_RPi_ILI9486.h>        // Setup file configured for my stock RPi TFT   company #####
-#include <User_Setups/Setup20_ILI9488.h>           // Setup file for ESP8266 and ILI9488 SPI bus TFT   ###home#####
-480x320 pixel
-*/
 
 // Tetris
 bool twelveHourFormat = true;
@@ -96,7 +59,6 @@ bool forceRefresh = true;
 
 void setup() {
 Serial.begin(115200);
-//Serial.setDebugOutput(true);
 
 randomSeed(analogRead(0));
 
@@ -107,37 +69,17 @@ randomSeed(analogRead(0));
    tft->setRotation(1); 
    #endif
    tft->fillScreen(ILI9486_BLACK);
-      tft->setTextSize(2);
-      //tft->setFreeFontFix();  // FF20
+   tft->setTextSize(2);
+
 
    tft->drawText("Start",0,0);
    delay(1);
    //tft->test();
    ConnectWifi();
        
-   #ifdef TARGET_esp32
      struct tm local;
-     configTzTime(TZ_INFO, NTP_SERVER); // ESP32 Systemzeit mit NTP Synchronisieren
+     configTzTime(MY_TZ, NTP_SERVER); // ESP32 Systemzeit mit NTP Synchronisieren
      getLocalTime(&local, 10000);      // Versuche 10 s zu Synchronisieren
-   #endif
-   #ifdef TARGET_8266
-     time_t now;
-     //struct tm * timeinfo;
-     tm tm;
-     //setenv("TZ", TZ_INFO, 1);
-     //configTime(1 * 3600,1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
-   
-     configTime(MY_TZ, NTP_SERVER); 
-
-     tft->drawText("waiting for time",0,60);
-     while (!time(nullptr)) {
-        Serial.print(".");
-        delay(1000);
-     }
-     time(&now);
-    // timeinfo = localtime(&now); 
-    localtime_r(&now, &tm); 
-   #endif
 
    tft->drawText("got time        ",0,60);
 
@@ -185,12 +127,7 @@ bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) 
 
 void ConnectWifi() {
  WiFi.mode(WIFI_STA);
-    #ifdef TARGET_esp32
     WiFi.setHostname(wifihostname);
-    #endif
-    #ifdef TARGET_8266
-    WiFi.hostname(wifihostname);
-    #endif
     wifiMulti.addAP(WIFI_SSID, WIFI_PASS);
     wifiMulti.addAP(WIFI_SSID2, WIFI_PASS2); 
 
@@ -215,7 +152,7 @@ void ConnectWifi() {
 }
 
 void GetTime( int16_t &hour, int16_t &min, int16_t &sec) {
-#ifdef TARGET_esp32
+
   struct tm timeinfo;
   if(!getLocalTime(&timeinfo)){
     tft->drawText("Failed to obtain time",0,0);
@@ -225,16 +162,6 @@ void GetTime( int16_t &hour, int16_t &min, int16_t &sec) {
   hour = timeinfo.tm_hour;
   min  = timeinfo.tm_min;
   sec = timeinfo.tm_sec;
-   #endif
-   #ifdef TARGET_8266
-     time_t now;
-     struct tm * timeinfo;
-     time(&now);
-     timeinfo = localtime(&now); 
-     hour = timeinfo->tm_hour;
-     min  = timeinfo->tm_min;
-     sec = timeinfo->tm_sec;
-   #endif
 
     uhrzeit[0] = hour / 10;
     uhrzeit[1] = hour % 10;
@@ -316,11 +243,8 @@ void InitArkonid() {
    #else
    tft->setRotation(3); 
    #endif
-  #ifdef TARGET_8266
-   SetGame(Arkonoid, 4);
-   #else
+
    SetGame(Arkonoid, 2);
-   #endif
 
     tft->fillScreen(ILI9486_BLACK);
     blocks->setColor(ILI9486_YELLOW);
@@ -379,11 +303,7 @@ void InitInvaders() {
 
   tft->fillScreen(ILI9486_BLACK);
 
-    #ifdef TARGET_8266
-   SetGame(Space_Invader, 4);
-   #else
    SetGame(Space_Invader, 2);
-   #endif
 
    GetTime();
    blocks->setColor(TFT_WHITE);

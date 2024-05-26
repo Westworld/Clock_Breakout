@@ -21,11 +21,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #define TetrisMatrixDraw_h
 
 #include <Arduino.h>
-#ifdef TARGET_8266
+#define TOUCH_CS // This sketch does not use touch, but this is defined to quiet the warning about not defining touch_cs.
+
 #include <TFT_eSPI.h> 
-#else
-#include "Adafruit_GFX.h"
-#endif
 
 #define TETRIS_MAX_NUMBERS 9
 
@@ -49,13 +47,8 @@ typedef struct
 class TetrisMatrixDraw
 {
     public:
-        #ifdef TARGET_8266
         TetrisMatrixDraw (TFT_eSPI  &display);
         TFT_eSPI *display;
-        #else
-        TetrisMatrixDraw (Adafruit_GFX  &display);
-        Adafruit_GFX  *display;
-        #endif
         bool drawNumbers(int x, int y, bool displayColon);
         bool drawNumbers(int x, int y, bool displayColon, int color);
         bool drawText(int x = 0, int y = 0);

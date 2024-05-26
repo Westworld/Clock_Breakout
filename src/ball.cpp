@@ -1,5 +1,4 @@
 #include "Ball.h"
-#include "Console.h"
 
 Ball::Ball(Screen * mastertft)
 {

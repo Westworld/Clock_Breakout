@@ -1,5 +1,4 @@
 #include "Shot.h"
-#include "Console.h"
 
 Shot::Shot(Screen * mastertft, int16_t movey)
 {
