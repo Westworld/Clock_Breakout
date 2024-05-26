@@ -1,3 +1,4 @@
+//#define rotate 0  // home: define
 
 
 #ifdef TARGET_esp32
@@ -27,6 +28,8 @@
 #include "paddle.h"
 #include "blocks.h"
 #include "shot.h"
+
+#include "Pacman.h"
 //#include "ntp_time.h"
 
 #include <Console.h>
@@ -48,7 +51,7 @@ Blocks * blocks;
 Shot * shotup;
 Shot * shotdown;
 
-short GameType = -1;  // 0 = Arkonid, 1 = Tetris
+short GameType = -1; // first 10 minutes Pacman  // 0 = Arkonid, 1 = Tetris
 
 #ifdef TARGET_esp32
 WiFiMulti wifiMulti;
@@ -69,13 +72,14 @@ const char* wifihostname = "Block Clock";
   int16_t curBlock;
 int16_t loopcounter=0;
 
+
+
 // ########### home - office:
-#define rotate 0  // home: define
 /*
 and modify User_Setup_Select.h:
 //#include <User_Setups/Setup5_RPi_ILI9486.h>        // Setup file configured for my stock RPi TFT   company #####
 #include <User_Setups/Setup20_ILI9488.h>           // Setup file for ESP8266 and ILI9488 SPI bus TFT   ###home#####
-
+480x320 pixel
 */
 
 // Tetris
@@ -94,6 +98,8 @@ void setup() {
 Serial.begin(115200);
 //Serial.setDebugOutput(true);
 
+randomSeed(analogRead(0));
+
    tft = new Screen();
    #ifdef rotate
    tft->setRotation(3); 
@@ -101,6 +107,9 @@ Serial.begin(115200);
    tft->setRotation(1); 
    #endif
    tft->fillScreen(ILI9486_BLACK);
+      tft->setTextSize(2);
+      //tft->setFreeFontFix();  // FF20
+
    tft->drawText("Start",0,0);
    delay(1);
    //tft->test();
@@ -119,7 +128,8 @@ Serial.begin(115200);
      //configTime(1 * 3600,1 * 3600, "time.nist.gov", "time.windows.com", "de.pool.ntp.org");
    
      configTime(MY_TZ, NTP_SERVER); 
-     tft->drawText("waiting for time",0,30);
+
+     tft->drawText("waiting for time",0,60);
      while (!time(nullptr)) {
         Serial.print(".");
         delay(1000);
@@ -129,14 +139,14 @@ Serial.begin(115200);
     localtime_r(&now, &tm); 
    #endif
 
-   tft->drawText("got time",0,40);
+   tft->drawText("got time        ",0,60);
 
    // Initialise SPIFFS
   if (!SPIFFS.begin()) {
-    tft->drawText("SPIFFS ERROR",0,60);
+    tft->drawText("SPIFFS ERROR",0,90);
   }
   else
-    tft->drawText("SPIFFS ready",0,60);
+    tft->drawText("SPIFFS ready",0,90);
 
    delay(2000);
    tft->fillScreen(ILI9486_BLACK);
@@ -161,10 +171,10 @@ Serial.begin(115200);
    shotup = new Shot(tft, 8);
    shotdown = new Shot(tft, -8);
 
-      //for (short i=0; i<3; i++)
-  // tetristest(); 
-
-   CheckTime();
+  //GetTime();
+Serial.println("startup before checktime");
+   CheckTime();  // starts game
+   Serial.println("startup after checktime");
 }
 
 
@@ -186,20 +196,20 @@ void ConnectWifi() {
 
     int loop=1;
 
-    tft->drawText("Connecting Wifi...",0,1);
+    tft->drawText("Connecting Wifi...",0,30);
 
     while ((loop < 10) && (wifiMulti.run() != WL_CONNECTED)) {
-      tft->drawText("try again to connect",0,20*loop);
+      tft->drawText("try again to connect",0,30*loop);
       delay(1000);
     }
     if(loop < 10) {
-         tft->drawText("connected",0,20);
+         tft->drawText("connected           ",0,30);
     }
     else
     {
-           tft->drawText("NOT CONNECTED ********+",0,20);
-           tft->drawText(WIFI_SSID,0,40);
-           tft->drawText(WIFI_SSID2,0,60);
+           tft->drawText("NOT CONNECTED ********+",0,30);
+           tft->drawText(WIFI_SSID,0,60);
+           tft->drawText(WIFI_SSID2,0,90);
            delay(5000);
     }
 }
@@ -251,8 +261,12 @@ void CheckTime() {
 
     int16_t newgame = uhrzeit[2] % 6;  
   
-      
-//GameType=Space_Invader;
+  if (++GameType <0) {
+      pacman_init(tft);
+  }
+  else {    
+       if (newgame == 5)
+        newgame =  random(5);  // new game between 0-5
 
        switch (newgame) {
         case Arkonoid:  // 0
@@ -270,22 +284,24 @@ void CheckTime() {
             GameType = Space_Invader;
           InitInvaders();
           break;    
-        case 3:  // 0
-          GameType = Arkonoid;
-          InitArkonid();
-          break;
-        case 4: 
+        case Pict_Clock: 
           GameType = Pict_Clock;
           InitClock();
           break;
+        case Pacman:  
+          GameType = Pacman;
+          pacman_init(tft);
+          break;
+
         case 5: 
-          GameType = Space_Invader;
-          InitInvaders();
+          GameType = Pacman;  // random?
+          pacman_init(tft);
           break;                
         default:
           // nothing 
           ;
-        }   
+        }  
+  }     
     last_hour = cur_hour;
     last_min = cur_min;
     last_sec = cur_sec;
@@ -294,6 +310,7 @@ void CheckTime() {
 }
 
 void InitArkonid() {
+   tft->reset();
    #ifdef rotate
    tft->setRotation(1); 
    #else
@@ -323,6 +340,7 @@ void PlayArkonid() {
 }
 
 void InitTetris() {
+    tft->reset();
    #ifdef rotate
    tft->setRotation(3); 
    #else
@@ -352,6 +370,7 @@ void PlayTetris() {
 
 
 void InitInvaders() {
+  tft->reset();
   #ifdef rotate
    tft->setRotation(1); 
    #else
@@ -468,6 +487,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
 }
 
 void InitClock() {
+  tft->reset();
   #ifdef rotate
    tft->setRotation(3); 
    #else
@@ -553,6 +573,11 @@ void loop() {
   loopcounter=0;
   }
 
+  if (GameType < 0) {
+      pacman_run(); 
+  }
+  else {
+
   switch (GameType) {
      case Arkonoid: 
       PlayArkonid();
@@ -569,11 +594,14 @@ void loop() {
     case Pict_Clock: 
       PlayClock();
       delay(100);
-      break;   
+      break;  
+    case Pacman:
+      pacman_run(); // delay inside  
     default:
       // nothing 
       ;
   }   
+  }
   yield();
 }
 

@@ -26,6 +26,7 @@
 
 #ifdef TARGET_8266
 #include <SPI.h>
+
 #include <TetrisMatrixDraw.h>
 
 //#define USER_SETUP_LOADED
@@ -46,7 +47,7 @@
 // #include <User_Setups/Setup20_ILI9488.h>   // für 4" noname
 
 #include <TFT_eSPI.h> // Hardware-specific library
-
+#include "Free_Fonts.h"
 
 
 
@@ -71,9 +72,12 @@ private:
     setup_t user;
     #endif
     TetrisMatrixDraw * tetris;
+    int16_t x_offset, y_offset;
 
 public:
     Screen(void);
+    void setOffset(int16_t x, int16_t y);
+    void reset(void);
     void test(void);
     long getwidth(void);
     long getheight(void);
@@ -81,9 +85,18 @@ public:
     void fillRect(int16_t x, int16_t y, int16_t radius, uint16_t color);
     void fillRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color);
     void drawRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color);
+    void drawRoundRect(int16_t x, int16_t y, int16_t width, int16_t height, int16_t corner, uint16_t color);
     void drawText(String text, int16_t x, int16_t y);
+    void drawNumber(int16_t number, int16_t x, int16_t y);
+    void setTextColor(int16_t front,int16_t back);
+    void setTextSize(int16_t size);
+    void setFreeFontFix();
+    void clearFreeFont();
     void setRotation(int16_t rot);
     void fillScreen(uint16_t color);
+    void drawicon(int x, int y, const uint16_t *icon); 
+
+
     int8_t getPinName(int8_t pin);
 
     void Tetris_setText(String txt, bool forceRefresh);

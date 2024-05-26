@@ -1,6 +1,5 @@
 #include "Screen.h"
 
-
 #ifdef ESP8266
   ADC_MODE(ADC_VCC); // Read the supply voltage
 #endif
@@ -21,7 +20,9 @@ Screen::Screen() {
     
     tft.init();
     #endif
- 
+
+    x_offset=0;y_offset=0;
+
     tetris = new TetrisMatrixDraw(tft);
 
     tft.setRotation(3);
@@ -30,6 +31,15 @@ Screen::Screen() {
     //tft.drawRect(0,0 , 300, 300, ILI9486_CYAN);
 }
 
+void Screen::setOffset(int16_t x, int16_t y) {
+    x_offset=x;
+    y_offset=y;
+}
+
+void Screen::reset() {
+    x_offset=0;y_offset=0;
+    tft.fillScreen(ILI9486_BLACK);
+}
 
 void Screen::setRotation(int16_t rot) {
     tft.setRotation(rot);
@@ -163,23 +173,47 @@ long Screen::getheight(void){
     return tft.height();
 }
 void Screen::fillCircle(int16_t x, int16_t y, int16_t radius, uint16_t color) {
-    tft.fillCircle(x, y, radius, color);
+    tft.fillCircle(x + x_offset, y + y_offset, radius, color);
 }
 void Screen::fillRect(int16_t x, int16_t y, int16_t radius, uint16_t color) {
-    tft.fillRect(x, y, radius, radius, color);
+    tft.fillRect(x + x_offset, y + y_offset, radius, radius, color);
 }    
 
 void Screen::fillRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color) {
-    tft.fillRect(x, y, width, height, color);
+    tft.fillRect(x + x_offset, y + y_offset, width, height, color);
 }
 
 void Screen::drawRect(int16_t x, int16_t y, int16_t width, int16_t height, uint16_t color) {
-    tft.drawRect(x, y, width, height, color);
+    tft.drawRect(x + x_offset, y + y_offset, width, height, color);
 }
+
+void Screen::drawRoundRect(int16_t x, int16_t y, int16_t width, int16_t height, int16_t corner, uint16_t color) {
+    tft.drawRoundRect(x + x_offset, y + y_offset, width, height, corner, color);
+}
+
+void Screen::setTextColor(int16_t front,int16_t back) {
+    tft.setTextColor(front,back); 
+}
+
+void Screen::setTextSize(int16_t size) {
+    tft.setTextSize(size);
+}
+
+ void Screen::setFreeFontFix() {
+     tft.setFreeFont(FF20); // FF20
+ }
+
+ void Screen::clearFreeFont() {
+     tft.setFreeFont(NULL); // FF20
+ }
+
+ void Screen::drawNumber(int16_t number, int16_t x, int16_t y) {
+     tft.drawNumber(number, x + x_offset, y + y_offset);
+ }
 
 void Screen::drawText(String text, int16_t x, int16_t y) {
         tft.setTextColor(ILI9486_YELLOW, ILI9486_BLACK);
-        tft.setCursor(x, y);
+        tft.setCursor(x + x_offset, y + y_offset);
         tft.println(text);
         
 }
@@ -188,6 +222,11 @@ void Screen::fillScreen(uint16_t color) {
     tft.fillScreen(color);
 }
 
+void Screen::drawicon(int x, int y, const uint16_t *icon) { // Draws the graphics icons based on stored image bitmaps  
+
+ tft.pushImage(x + x_offset, y + y_offset, 28, 28, icon);
+  
+}
 
 
 void Screen::Tetris_setText(String txt, bool forceRefresh) {
