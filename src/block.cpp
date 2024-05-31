@@ -250,37 +250,19 @@ int16_t Block::isNearestBlock(int16_t paddle_x) {
 
 void SetGame(int16_t gameType, int16_t screenSize) {
 if (gameType == Arkonoid) {
-    if (screenSize == 4) {
-        blockwidth = 23;
-         blockheight = 20;
-         blockstartx = 430;
-         blockstarty = 420;
-         blockoffset = 10;
-    }
-    else {  // 2.4 Inch
         blockwidth = 12;
         blockheight = 14;
-        blockstartx = 280;
-        blockstarty = 400;
+        blockstartx = 300;
+        blockstarty = 380;
         blockoffset = 10;
-    }
 
 }
 else {  // Space Invader
-    if (screenSize == 4) {
-         blockwidth = 13;
-         blockheight = 12;
-         blockstartx = 460;
-         blockstarty = 520;
-         blockoffset = 5;
-    }
-    else {  // 2.4 Inch
-        blockwidth = 12;
-        blockheight = 14;
-        blockstartx = 280;
-        blockstarty = 400;
+        blockwidth = 10;
+        blockheight = 12;
+        blockstartx = 320; //280;
+        blockstarty = 440; //400;
         blockoffset = 10;
-    }
 }
 
 }

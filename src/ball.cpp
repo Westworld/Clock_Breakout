@@ -4,13 +4,8 @@ Ball::Ball(Screen * mastertft)
 {
     tft = mastertft;
     pos_x = tft->getwidth() / 2;
-
- #ifdef TARGET_esp32    
-    pos_y = 10;
-#endif
-#ifdef TARGET_8266
     pos_y = 18;
-#endif    
+   
     move_x = 1;
     move_y = 1;
     max_x = tft->getwidth();
@@ -27,17 +22,6 @@ void Ball::SetY(int16_t y) {
 
 Ballsize Ball::GetSize(void) {
     Ballsize thesize;
-/*
-    if (move_x > 0) 
-        { thesize.x = pos_x; thesize.x2 = pos_x+radius; }
-    else 
-        { thesize.x2 = pos_x; thesize.x = pos_x-radius; }
-
-    if (move_y > 0) 
-        { thesize.y = pos_y; thesize.y2 = pos_y+radius; }
-    else 
-        { thesize.y2 = pos_y; thesize.y = pos_y-radius; }
-*/
 
     thesize.x = pos_x; thesize.x2 = pos_x+radius;
     thesize.y = pos_y; thesize.y2 = pos_y+radius;
@@ -101,14 +85,7 @@ int16_t Ball::move_draw(void) {
     pos_y = pos_y + move_y;
 
     if ((pos_x <= 0) || (pos_x >= max_x)) move_x = -move_x;
-  
-
-#ifdef TARGET_esp32    
-    if ((pos_y <= 4) || (pos_y >= max_y)) move_y = -move_y;
-#endif
-#ifdef TARGET_8266
-    if ((pos_y <= 15) || (pos_y >= max_y)) move_y = -move_y;
-#endif 
+    if ((pos_y <= 5) || (pos_y >= max_y)) move_y = -move_y;
 
     this->draw();  
     return blockid; 

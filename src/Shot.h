@@ -19,7 +19,7 @@ private:
     float move_y;
     float pos_x, pos_y;
     int16_t max_x, max_y;
-    uint16_t color = ILI9486_YELLOW;
+    int16_t color = ILI9486_YELLOW;
     bool active=false;
 
     Screen * tft;

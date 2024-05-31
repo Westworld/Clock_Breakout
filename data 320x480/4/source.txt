@@ -1,0 +1,7 @@
+https://github.com/AndreasRef/InstaClock
+https://savageelectronics.com/spi-display-array-board-clock/
+
+
+upload using platformio icon, project tasks, upload file system image
+
+

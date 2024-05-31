@@ -20,6 +20,10 @@
 
 #include <time.h>  
 
+#define CYD_LED_BLUE 17
+#define CYD_LED_RED 4
+#define CYD_LED_GREEN 16
+
 Screen * tft;
 Ball * ball;
 Paddle * paddle;
@@ -28,7 +32,9 @@ Blocks * blocks;
 Shot * shotup;
 Shot * shotdown;
 
-short GameType = -1; // first 10 minutes Pacman  // 0 = Arkonid, 1 = Tetris
+short GameType = 1; // first 10 minutes Pacman  // 0 = Arkonid, 1 = Tetris
+   #define TetrisXStart 8
+   #define TetrisYStart 450
 
 WiFiMulti wifiMulti;
 
@@ -60,6 +66,13 @@ bool forceRefresh = true;
 void setup() {
 Serial.begin(115200);
 
+  pinMode(CYD_LED_RED, OUTPUT);  // all off
+  pinMode(CYD_LED_GREEN, OUTPUT);
+  pinMode(CYD_LED_BLUE, OUTPUT);
+  digitalWrite(CYD_LED_RED, HIGH); 
+  digitalWrite(CYD_LED_GREEN, HIGH);
+  digitalWrite(CYD_LED_BLUE, HIGH);
+
    tft = new Screen();
    #ifdef rotate
    tft->setRotation(3); 
@@ -69,16 +82,12 @@ Serial.begin(115200);
    tft->fillScreen(ILI9341_BLACK);
    tft->setTextSize(2);
 
-
    tft->drawText("Start",00,00);
-   delay(2000);
    Serial.println("before Wifi");
-
-    
+ 
    //tft->test();
    ConnectWifi();
     Serial.println("after Wifi");
-    delay(2000);
      struct tm local;
      configTzTime(MY_TZ, NTP_SERVER); // ESP32 Systemzeit mit NTP Synchronisieren
      getLocalTime(&local, 10000);      // Versuche 10 s zu Synchronisieren
@@ -115,12 +124,11 @@ Serial.begin(115200);
    shotup = new Shot(tft, 8);
    shotdown = new Shot(tft, -8);
 
-  //GetTime();
-Serial.println("startup before checktime");
+   //GetTime();
+   Serial.println("startup before checktime");
    CheckTime();  // starts game
    Serial.println("startup after checktime");
 }
-
 
 bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) {
   return tft->tft_output(x, y, w, h, bitmap);
@@ -187,17 +195,13 @@ void CheckTime() {
   GetTime( cur_hour,cur_min, cur_sec);
 
   if ((cur_hour != last_hour) || (cur_min != last_min)) {
-
     int16_t newgame = uhrzeit[2] % 6;  
-  
-  if (++GameType <0) {
-      pacman_init(tft);
-  }
-  else {    
-       if (newgame == 5)
-        newgame =  random(4);  // new game between 0-5
+    newgame=3;  // for testing
+      
+    if (newgame >= 5)
+        newgame =  random(4);  // new game between 0-4
 
-       switch (newgame) {
+    switch (newgame) {
         case Arkonoid:  // 0
           GameType = Arkonoid;
           InitArkonid();
@@ -227,7 +231,7 @@ void CheckTime() {
           pacman_init(tft);
           break;    
         }  
-  }     
+   
     last_hour = cur_hour;
     last_min = cur_min;
     last_sec = cur_sec;
@@ -243,13 +247,13 @@ void InitArkonid() {
    tft->setRotation(3); 
    #endif
 
-   SetGame(Arkonoid, 2);
+    SetGame(Arkonoid, 2);  // screen size
 
     tft->fillScreen(ILI9486_BLACK);
     blocks->setColor(ILI9486_YELLOW);
     paddle->setType(true);
     paddle->draw();
-    ball->SetY(20);
+    ball->SetY(tft->getheight()-10);
     blocks->Setup(uhrzeit);
     blocks->draw();
 }
@@ -263,34 +267,33 @@ void PlayArkonid() {
 }
 
 void InitTetris() {
-    tft->reset();
+
+   tft->reset();
    #ifdef rotate
    tft->setRotation(3); 
    #else
    tft->setRotation(1); 
    #endif
   tft->fillScreen(ILI9486_BLACK);
+
   char timeString [8];
   sprintf(timeString, "%d%d:%d%d", uhrzeit[0], uhrzeit[1], uhrzeit[2], uhrzeit[3]);
   tft->Tetris_setTime(timeString);
 
   bool displaycolon = false;
-  while(!(tft->Tetris_drawNumbers(40,250, displaycolon, -1))) {
-    delay(45);
+  while(!(tft->Tetris_drawNumbers(TetrisXStart,TetrisYStart, displaycolon, -1))) {
+    delay(60);
     yield();
     GetTime();
 
     displaycolon = ((uhrzeit[5] % 2) == 1);
-    //tft->Tetris_drawNumbers(40,250, displaycolon, ILI9486_BLACK);
   }
-  //tft->Tetris_drawNumbers(40,250, displaycolon, -2);
 }
 
 void PlayTetris() {
   bool displaycolon = ((uhrzeit[5] % 2) == 1);
-  tft->Tetris_drawNumbers(40,250, displaycolon, -1);
+  tft->Tetris_drawNumbers(TetrisXStart,TetrisYStart, displaycolon, -1);
 }
-
 
 void InitInvaders() {
   tft->reset();
@@ -313,12 +316,11 @@ void InitInvaders() {
    shotup->deactivate();
    shotdown->deactivate();
 
-
   invaders_move_x = 0, invaders_move_y = 0;
-  invaders_domovex = -5, invaders_domovey = 0;
+  invaders_domovex = -3, invaders_domovey = 0;
 
   invaders_loopcounter = 0, invaders_loopx = 0, invaders_blockcounter = 0;
-  invaders_maxxloop = 31 * numberblocks * 15;  // 24000
+  invaders_maxxloop = 30 * numberblocks * 15;  // 24000
 }
 
 void ResetInvaders() {
@@ -337,13 +339,13 @@ if (invaders_loopcounter < invaders_maxxloop) {
         invaders_blockcounter = 0;
         invaders_move_x += invaders_domovex;
         if (invaders_domovey != 0) {
-          invaders_move_y -= 15;
+          invaders_move_y -= 5;
           invaders_domovey = 0;
         } 
 
-      if (++invaders_loopx >=31 ) {
+      if (++invaders_loopx >=20 ) {   // 31
           invaders_loopx = 0;
-          invaders_domovey = -15;
+          invaders_domovey = -5;
           invaders_domovex = -invaders_domovex;
       }  
     }
@@ -382,7 +384,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
       else {
         // no risk being hit, but do we have a block above us or do we need to move?
         paddlex = paddle->getX();
-        x = blocks->findNearestBlock(paddlex);
+        x = blocks->findNearestBlock(paddlex);      
  
         if (x != 0) {  
           //paddle->undraw();  
@@ -517,7 +519,7 @@ void loop() {
     case Pacman:
       pacman_run(); // delay inside  
     default:
-      // nothing 
+      pacman_run(); // delay inside  
       ;
   }   
   }

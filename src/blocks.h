@@ -7,7 +7,7 @@
 
 #define blocksx 12
 #define blocksy 5
-#define screenstartx 2
+#define screenstartx 10
 #define screenstarty 280
 
 #define numberblocks 75

@@ -4,24 +4,6 @@
 #include "screen.h"
 #include "ball.h"
 
-/*
- #ifdef TARGET_8266
-//#define blockwidth 23
-#define blockheight 20
-#define blockstartx 430
-#define blockstarty 420
-#define blockoffset 10
-#endif
-
-#ifdef TARGET_esp32
-#define blockwidth 12
-#define blockheight 14
-#define blockstartx 280
-#define blockstarty 400
-#define blockoffset 10
-#endif
-*/
-
 enum { Arkonoid, Tetris, Space_Invader, Pict_Clock, Pacman };
 
 

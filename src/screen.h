@@ -1,7 +1,7 @@
 #ifndef SCREEN_HPP_
 #define SCREEN_HPP_
 #define TOUCH_CS // This sketch does not use touch, but this is defined to quiet the warning about not defining touch_cs.
-
+#include <Arduino.h>
 #include <TFT_eSPI.h> // Hardware-specific library
 #include "Free_Fonts.h"
 #include <TetrisMatrixDraw.h>

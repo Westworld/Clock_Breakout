@@ -52,7 +52,6 @@ void Blocks::Setup(byte digit[4])
    int16_t curelement=0;
    int16_t x, y, startx=screenstartx;
 
-
     for (int16_t digitcounter=0; digitcounter<maxelements; digitcounter++) {
         allblocks[digitcounter]->setUnused();
     }
@@ -60,7 +59,6 @@ void Blocks::Setup(byte digit[4])
     for (int16_t digitcounter=0; digitcounter<4; digitcounter++) {
         int16_t value = digit[digitcounter];
         if ((value < 0) || (value>9)) return;
-
         for (uint16_t i=0; i<sizeof(ziffern[value]); i+=2) {
             if (ziffern[value][i] != 10)
             {
@@ -208,15 +206,18 @@ void Blocks::findNearestBlock(int16_t &x, int16_t &y, int16_t paddle_x) {
 }
 
 int16_t Blocks::findNearestBlock(int16_t paddle_x) {   
-    int16_t blockx, blocky, x = 0;
+    int16_t blockx, blocky, x = 0, test=0;
 
     // find nearest block above paddle
 
     for (int16_t i=0; i<numberblocks; i++) {
         if ((allblocks[i]->used) && (allblocks[i]->active)) {
             x += allblocks[i]->isNearestBlock(paddle_x);
+            test++;
         }
     }    
+    if ((test != 0) && (x == 0))
+        return -2;  // we are in the middle, both side have same number of blocks
     return x;
 }
 

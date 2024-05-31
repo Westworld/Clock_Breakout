@@ -74,7 +74,7 @@ Serial.println("packman init");
 
     myGLCD = mastertft;
     myGLCD->fillScreen(ILI9486_BLACK);
-    myGLCD->setOffset(60, 40);
+    myGLCD->setOffset(0, 0);  // 60;40
 
    #ifdef rotate
    myGLCD->setRotation(3);   // reverse !!!

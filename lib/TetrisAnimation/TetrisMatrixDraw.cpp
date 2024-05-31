@@ -450,8 +450,6 @@ void TetrisMatrixDraw::drawLargerShape(int scale, int blocktype, uint16_t color,
 void TetrisMatrixDraw::setNumState(int index, int value, int x_shift)
 {
     if(index < TETRIS_MAX_NUMBERS) {
-      Serial.println(value);
-
         this->numstates[index].num_to_draw = value;
         this->numstates[index].x_shift = x_shift;
         this->numstates[index].fallindex = 0;

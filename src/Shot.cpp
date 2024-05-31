@@ -70,7 +70,7 @@ void Shot::draw(void) {
         int16_t x, y;
         x = (int16_t) pos_x;
         y = (int16_t) pos_y;    
-        tft->fillRect(x, y, shotwidth, shotheight, color);
+        tft->fillRect(x, y, shotwidth, shotheight, ILI9486_YELLOW); //color);
     }
 }
 
