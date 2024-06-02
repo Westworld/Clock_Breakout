@@ -42,6 +42,7 @@ public:
     void setRotation(int16_t rot);
     void fillScreen(uint16_t color);
     void drawicon(int x, int y, const uint16_t *icon); 
+    void drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap, uint16_t fgcolor);
 
     void Tetris_setText(String txt, bool forceRefresh);
     bool Tetris_drawText(int x, int y);
@@ -52,7 +53,7 @@ public:
     bool Tetris_drawNumbers(int x_pos, int y_pos, bool drawColon, int color);
     void Tetris_DrawChar(String letter, uint8_t x, uint8_t y, uint16_t color);
     void Tetris_drawShape(int blocktype, uint16_t color, int x_pos, int y_pos, int num_rot);
-
+ 
     bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap);
     void tft_setSwapBytes(bool swap);
 };

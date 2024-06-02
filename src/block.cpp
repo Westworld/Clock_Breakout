@@ -1,4 +1,4 @@
-#include "Block.h"
+#include "block.h"
 
 
 // cannot use #define, as size depending of game type
@@ -7,6 +7,7 @@ int16_t blockheight = 20;
 int16_t blockstartx = 430;
 int16_t blockstarty = 420;
 int16_t blockoffset = 10;
+int16_t gametype=0;
 
 
 Block::Block(void)
@@ -20,7 +21,7 @@ void Block::setColor(int16_t othercolor)
     color = othercolor;
 }
 
-void Block::activate(int16_t posx, int16_t posy) 
+void Block::activate(int16_t posx, int16_t posy, int8_t rowForInvader) 
 {
     used = true;
     active = true;
@@ -28,7 +29,7 @@ void Block::activate(int16_t posx, int16_t posy)
     pos_x = posx;
     pos_y = posy;
 
-    //Console::info("Block pos [%d] [%d]: ", pos_x, pos_y);
+    row = rowForInvader;
 }
 
 void Block::setUnused(void) 
@@ -39,6 +40,20 @@ void Block::setUnused(void)
 
 void Block::draw(Screen * tft)
 {
+
+     if (gametype == Space_Invader) {
+        if (used) {
+            if (active) {
+                tft->drawBitmap(pos_x, pos_y, getInvader(false), TFT_WHITE);
+            }    
+            else
+            {
+                tft->drawBitmap(pos_x, pos_y, getInvader(false), TFT_YELLOW);  // disabled or other color!
+            }            
+        }
+        return;
+    } 
+
     if (used) {
         if (active)
             tft->fillRect(pos_x, pos_y, blockwidth, blockheight, color);
@@ -56,12 +71,31 @@ void Block::drawendofgame(Screen * tft, uint16_t newcolor)
 {
     if (used) {
         if (active)
-            tft->fillRect(last_pos_x, last_pos_y, blockwidth, blockheight, newcolor);     
+            if (gametype == Space_Invader)
+                 tft->drawBitmap(last_pos_x, last_pos_y, getInvader(false), newcolor);
+            else
+                tft->fillRect(last_pos_x, last_pos_y, blockwidth, blockheight, newcolor);     
     } 
 }
 
-void Block::draw(Screen * tft, int16_t move_x, int16_t move_y)
+void Block::draw(Screen * tft, int16_t move_x, int16_t move_y, bool Space_Shift)
 {
+     if (gametype == Space_Invader) {
+        if (used) {
+            if (active) {
+                tft->drawBitmap(pos_x+move_x, pos_y+move_y, getInvader(Space_Shift), TFT_WHITE);
+                last_pos_x=pos_x+move_x; 
+                last_pos_y=pos_y+move_y;
+            }    
+            else
+            {
+                tft->drawBitmap(pos_x+move_x, pos_y+move_y, getInvader(Space_Shift), TFT_YELLOW);  // disabled or other color!
+            }            
+        }  
+        return;
+    } 
+
+
     if (used) {
         if (active) {
             tft->fillRect(pos_x+move_x, pos_y+move_y, blockwidth, blockheight, color);
@@ -216,7 +250,7 @@ bool Block::check(int16_t posx, int16_t posy, Screen * tft)
             if ( (posy <= (last_pos_y+blockheight)) && (posy >= last_pos_y) )
             {
 
-                draw(tft, last_pos_x-pos_x, last_pos_y-pos_y, TFT_RED);  // malen nur mit Versatz, woher Versatz erfahren?
+                draw(tft, last_pos_x-pos_x, last_pos_y-pos_y, (int16_t) TFT_RED);  // malen nur mit Versatz, woher Versatz erfahren?
                 active=false;
                 return true;           
             }       
@@ -265,4 +299,20 @@ else {  // Space Invader
         blockoffset = 10;
 }
 
+gametype = gameType;
+
+}
+
+
+const unsigned char * Block::getInvader(bool Space_Shift) {
+    if (Space_Shift) {
+        if (row <=2) return a1a;
+        if (row <=4) return a2a;   
+        return a3a; 
+    }
+    else {
+        if (row <=2) return a1b;
+        if (row <=4) return a2b;   
+        return a3b;        
+    }
 }

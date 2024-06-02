@@ -157,3 +157,36 @@ bool Screen::tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* 
   // Return 1 to decode next block
   return 1;
 }
+
+/***************************************************************************************
+** Function name:           drawBitmap
+** Description:             Draw an image stored in an array on the TFT
+***************************************************************************************/
+void Screen::drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap, uint16_t fgcolor)
+{
+  tft.begin_nin_write();     
+
+
+  int16_t w;
+  int16_t h;
+  uint16_t bgcolor = TFT_BLACK;
+  int16_t offset=0;
+
+  w = pgm_read_byte((uint32_t)(bitmap) + offset);
+		offset++;
+  h = pgm_read_byte((uint32_t)(bitmap) + offset);
+		offset++;
+
+  int32_t i, j, byteWidth = (w + 7) / 8;
+
+  for (j = 0; j < h; j++) {
+    for (i = 0; i < w; i++ ) {
+      if (pgm_read_byte(bitmap + offset + j * byteWidth + i / 8) & (128 >> (i & 7)))
+           tft.drawPixel(x + i, y + j, fgcolor);
+      else tft.drawPixel(x + i, y + j, bgcolor);
+    }
+  }
+
+ // inTransaction = tft.lockTransaction;
+ tft.end_nin_write();              // Does nothing if Sprite class uses this function
+}

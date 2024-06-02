@@ -17,6 +17,7 @@ class Blocks
 private:
     Block* allblocks[numberblocks];
     Screen * tft;
+    bool InvaderShift = false;
 
 public:
     Blocks(Screen * mastertft);
@@ -25,7 +26,7 @@ public:
     void Setup(byte digit[4]);
     //void update(float ballpos);
     void draw(void);
-    void draw(int16_t old_x, int16_t old_y, int16_t loop, int16_t move_x, int16_t move_y);
+    void draw(int16_t old_x, int16_t old_y, int16_t loop, int16_t move_x, int16_t move_y, bool Space_Shift);
     void draw(Ball * ball);
     void checkBall(Ball * ball);
     bool checkShot(int16_t x, int16_t y);  

@@ -196,7 +196,7 @@ void CheckTime() {
 
   if ((cur_hour != last_hour) || (cur_min != last_min)) {
     int16_t newgame = uhrzeit[2] % 6;  
-    newgame=3;  // for testing
+    newgame=2;  // for testing
       
     if (newgame >= 5)
         newgame =  random(4);  // new game between 0-4
@@ -330,10 +330,13 @@ void ResetInvaders() {
 }
 
 void PlayInvaders() {
+static bool Inv_Shift=false;
+
+Inv_Shift = !Inv_Shift;
 
 if (invaders_loopcounter < invaders_maxxloop) {
     if (invaders_blockcounter <=numberblocks) {
-      blocks->draw(invaders_move_x, invaders_move_y, invaders_blockcounter++, invaders_domovex, invaders_domovey);
+      blocks->draw(invaders_move_x, invaders_move_y, invaders_blockcounter++, invaders_domovex, invaders_domovey, Inv_Shift);
     }
     else {
         invaders_blockcounter = 0;

@@ -17,14 +17,11 @@ void Blocks::Setup(void)
    int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
    int16_t curelement;
 
-   //Console::info("Blocks setup");
-
    for (int16_t i=0;i<blocksx;i++) {
         for (int16_t j=0; j<blocksy; j++) {
             curelement = (i*blocksy)+(j);
-            //Console::info("element [%d]: ", curelement);
             if (curelement < maxelements)
-                allblocks[curelement]->activate(i*(blockwidth+10), screenstarty- (j*(blockheight+10)));
+                allblocks[curelement]->activate(i*(blockwidth+10), screenstarty- (j*(blockheight+10)), 1);
         }
     }
 }
@@ -40,13 +37,15 @@ void Blocks::Setup(int16_t position, int16_t digit)
             x = (value1[i]*blockwidth) + screenstartx;
             y = screenstarty - (value1[i+1]*blockheight);
             if (curelement < maxelements)
-                allblocks[curelement++]->activate(x, y);
+                allblocks[curelement++]->activate(x, y, 1);
     }
 }
 
 
 void Blocks::Setup(byte digit[4])
 {
+    InvaderShift = !InvaderShift;
+
     // start für position 1 und digit 1
    int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
    int16_t curelement=0;
@@ -67,7 +66,7 @@ void Blocks::Setup(byte digit[4])
                 x = blockstartx-x;
                 y = blockstarty-y;
                 if (curelement < maxelements)
-                    allblocks[curelement++]->activate(x, y);
+                    allblocks[curelement++]->activate(x, y, ziffern[value][i+1]);
             }
         }
         startx += (3*(blockwidth+10));
@@ -77,13 +76,13 @@ void Blocks::Setup(byte digit[4])
             y = screenstarty - (2*((blockheight/2)+2));
             x = blockstartx-x;
             y = blockstarty-y;
-            allblocks[curelement++]->activate(x, y);
+            allblocks[curelement++]->activate(x, y, 1);
 
             x = ((blockwidth/2)+2) + startx;
             y = screenstarty - (6*((blockheight/2)+2));
             x = blockstartx-x;
             y = blockstarty-y;
-            allblocks[curelement++]->activate(x, y);
+            allblocks[curelement++]->activate(x, y, 1);
             startx += (2*(blockwidth+blockoffset));
         }
     }
@@ -119,13 +118,13 @@ int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
     }
 }
 
-void Blocks::draw(int16_t old_x, int16_t old_y, int16_t loop, int16_t move_x, int16_t move_y)
+void Blocks::draw(int16_t old_x, int16_t old_y, int16_t loop, int16_t move_x, int16_t move_y, bool Space_Shift)
 {
    int16_t maxelements = sizeof(allblocks)/sizeof(allblocks[0]);
    if (loop >= maxelements) return;
 
    allblocks[loop]->undraw(tft, old_x, old_y);
-   allblocks[loop]->draw(tft, old_x+move_x, old_y+move_y);
+   allblocks[loop]->draw(tft, old_x+move_x, old_y+move_y, Space_Shift);
 }
 
 void Blocks::draw(Ball * ball)  // only draw blocks close to the ball position
