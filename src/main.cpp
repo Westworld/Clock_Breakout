@@ -196,7 +196,7 @@ void CheckTime() {
 
   if ((cur_hour != last_hour) || (cur_min != last_min)) {
     int16_t newgame = uhrzeit[2] % 6;  
-    newgame=2;  // for testing
+    //newgame=2;  // for testing
       
     if (newgame >= 5)
         newgame =  random(4);  // new game between 0-4
@@ -357,7 +357,7 @@ if (invaders_loopcounter < invaders_maxxloop) {
 
     if ((invaders_loopcounter % 15) == 1 ) {
       if (!shotup->move_draw()) {
-          shotup->activate(paddle->getX(), 20, false);
+          shotup->activate(paddle->getX()-8, 10, false);
         // new shot up, set x depending of paddle, which sets ative again      
       }
 

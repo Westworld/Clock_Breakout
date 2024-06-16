@@ -12,12 +12,12 @@ Paddle::Paddle(Screen * mastertft)
 void Paddle::setType(bool gametyp)
 {
     justLine = gametyp;
-    if (gametyp) {
+    if (gametyp) {  // arkonid
         paddleheight = 4;
     }
     else
     {
-        paddleheight = 8;    
+        paddleheight = 8;    // false - invader
     }
     
 }
@@ -56,7 +56,9 @@ void Paddle::draw(void)
     if (justLine)
         tft->fillRect(x, pos_y, paddlewidth, paddleheight, color);
     else {
-        tft->fillRect(x, pos_y, paddlewidth, paddleheight, color);
+       // tft->fillRect(x, pos_y, paddlewidth, paddleheight, color);
+        tft->drawBitmap(x, pos_y, ca1, color);
+        
     }    
 }
 
@@ -74,15 +76,17 @@ void Paddle::move(int16_t movex)  // only for block
 
     if (movex < 0) {
             // move to the right, remove on the left. left is higher number!
-            tft->fillRect(x+paddlewidth+1, pos_y, abs(movex)+1, paddleheight, ILI9486_BLACK);
+            tft->fillRect(x-2, pos_y, paddlewidth+4, paddleheight, ILI9486_BLACK);
             pos_x += movex;
             x += movex;
-            tft->fillRect(x, pos_y, abs(movex), paddleheight, ILI9486_YELLOW);
+          // tft->fillRect(x, pos_y, abs(movex), paddleheight, ILI9486_YELLOW);
+           tft->drawBitmap(x, pos_y, ca1, color);
         } else {
-            tft->fillRect(x - movex, pos_y, movex+1, paddleheight, ILI9486_BLACK);  // +paddlewidth
+            tft->fillRect(x - movex-2, pos_y, movex+4, paddleheight, ILI9486_BLACK);  // +paddlewidth
             pos_x += movex;
             x += movex;
-            tft->fillRect(x+paddlewidth, pos_y, movex, paddleheight, color);
+            //tft->fillRect(x+paddlewidth, pos_y, movex, paddleheight, color);
+            tft->drawBitmap(x, pos_y, ca1, color);
         }
 }
 
@@ -110,9 +114,11 @@ void Paddle::update(float ballpos)  // only for justLine
             // remove on the right, draw on the left
             tft->fillRect(old + half, pos_y, 2, paddleheight, ILI9486_BLACK);
             tft->fillRect(pos_x - half, pos_y, 2, paddleheight, color);
+           // tft->drawBitmap(pos_x - half, pos_y, ca1, color);
         } else {
             tft->fillRect(old - half, pos_y, 2, paddleheight, ILI9486_BLACK);
             tft->fillRect(pos_x + half, pos_y, 2, paddleheight, color);
+            //tft->drawBitmap(pos_x + half, pos_y, ca1, color);
         }
     }
 
